@@ -11,6 +11,10 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <VBox spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.lfp.py_lite_compiler.MainWindowController">
     <padding>
@@ -31,24 +35,38 @@
     </Panel>
     <GridPane>
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="Infinity" minHeight="10.0" prefHeight="250" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="Infinity" minHeight="10.0" prefHeight="275" vgrow="ALWAYS"/>
         </rowConstraints>
         <Label text="Codigo fuente:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <HBox alignment="CENTER_RIGHT" layoutY="10"  GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <HBox alignment="CENTER_RIGHT" layoutY="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
             <Button styleClass="btn, btn-success" text=">>" onAction="#onRunButtonClick"/>
             <Button styleClass="btn, btn-primary" text="Grafico" onAction="#onGraphButtonClick"/>
             <Button styleClass="btn, btn-warning" text="Archivo" onAction="#onFileButtonClick"/>
         </HBox>
-        <TextArea wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="1" id="srcCode" fx:id="srcCode" />
+        <TextArea wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="1" id="srcCode" fx:id="srcCode"/>
     </GridPane>
-    <VBox alignment="CENTER_LEFT">
-        <Label text="Salida:"/>
-        <TextArea wrapText="true" editable="false"  id="output" fx:id="output" />
-    </VBox>
+    <HBox spacing="20">
+        <VBox alignment="CENTER_LEFT" prefHeight="225" prefWidth="560">
+            <Label text="Token reports:"/>
+            <TableView fx:id="tokenTable" id="tokenTable">
+                <columns>
+                    <TableColumn fx:id="nameColumn" text="Token name" prefWidth="155"/>
+                    <TableColumn fx:id="patternColumn" text="Pattern" prefWidth="140"/>
+                    <TableColumn fx:id="lexemeColumn" text="Lexeme" prefWidth="145"/>
+                    <TableColumn fx:id="lineColumn" text="Line" prefWidth="50"/>
+                    <TableColumn fx:id="colColumn" text="Col" prefWidth="50"/>
+                </columns>
+            </TableView>
+        </VBox>
+        <VBox alignment="CENTER_LEFT" prefHeight="200" prefWidth="380">
+            <Label text="Errors:"/>
+            <TextArea wrapText="true" editable="false" id="errorOutput" fx:id="errorOutput"/>
+        </VBox>
+    </HBox>
 </VBox>
 
