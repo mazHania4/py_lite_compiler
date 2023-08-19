@@ -14,7 +14,6 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 
-<?import javafx.scene.control.cell.PropertyValueFactory?>
 <VBox spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.lfp.py_lite_compiler.MainWindowController">
     <padding>
@@ -24,7 +23,7 @@
         <heading>
             <BorderPane>
                 <center>
-                    <Label styleClass="h2" text="Python Lite Compiler"/>
+                    <Label styleClass="h2" text="PARSER-PY"/>
                 </center>
                 <bottom>
                     <Button BorderPane.alignment="TOP_RIGHT" styleClass="btn, btn-xs, btn-info" text="Ayuda"

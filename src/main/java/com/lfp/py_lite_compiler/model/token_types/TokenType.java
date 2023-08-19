@@ -2,7 +2,7 @@ package com.lfp.py_lite_compiler.model.token_types;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.*;
-@Getter @Setter @AllArgsConstructor
+@Getter @Setter @AllArgsConstructor @ToString
 public class TokenType {
     private String name;
     private String pattern;
