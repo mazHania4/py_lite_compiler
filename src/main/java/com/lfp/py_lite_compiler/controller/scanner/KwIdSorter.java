@@ -1,8 +1,8 @@
 package com.lfp.py_lite_compiler.controller.scanner;
 
-import com.lfp.py_lite_compiler.model.token_types.KeywordFCTY;
-import com.lfp.py_lite_compiler.model.token_types.OtherTypesFCTY;
-import com.lfp.py_lite_compiler.model.token_types.TokenType;
+import com.lfp.py_lite_compiler.model.tokens.token_types.KeywordFCTY;
+import com.lfp.py_lite_compiler.model.tokens.token_types.OtherTypesFCTY;
+import com.lfp.py_lite_compiler.model.tokens.token_types.TokenType;
 import java.util.HashMap;
 
 public class KwIdSorter {

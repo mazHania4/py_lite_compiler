@@ -1,22 +1,26 @@
 package com.lfp.py_lite_compiler.controller.scanner;
 
-import com.lfp.py_lite_compiler.model.Token;
-import com.lfp.py_lite_compiler.model.token_types.OtherTypesFCTY;
-import com.lfp.py_lite_compiler.model.token_types.TokenType;
-
+import com.lfp.py_lite_compiler.controller.scanner.states.*;
+import com.lfp.py_lite_compiler.model.errors.Error;
+import com.lfp.py_lite_compiler.model.errors.error_types.ErrorType;
+import com.lfp.py_lite_compiler.model.errors.error_types.LexicalErrorFCTY;
+import com.lfp.py_lite_compiler.model.tokens.Token;
+import com.lfp.py_lite_compiler.model.tokens.token_types.OtherTypesFCTY;
+import com.lfp.py_lite_compiler.model.tokens.token_types.TokenType;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Scanner {
-    private char[] charStream;
+    private final char[] charStream;
     private int currentLine, currentColumn, currentPosition;
     private char currentChar;
     private State currentState;
     private final StringBuilder lexeme;
-    private final List<Token> tokens;
+    private List<Token> tokens;
+    private final List<Error> errors;
     private final TransitionTable transitionTable;
     private final KwIdSorter kwIdSorter;
-    private IndentationController indentationCtrl;
+    private final IndentationController indentationCtrl;
 
     public List<Token> analyze() {
         while (currentPosition + 1 < charStream.length) {
@@ -25,7 +29,10 @@ public class Scanner {
             currentState = State.S0;
             lexeme.delete(0, lexeme.length());
         }
-        cleanNewlines();
+        for (Token tkn:tokens) {
+            System.out.println(tkn.toString());
+        }
+        indentationCtrl.cleanInvalidNewlines(tokens);
         return tokens;
     }
 
@@ -40,11 +47,11 @@ public class Scanner {
 
     private void addTokens() {
         if (currentIsErrorState()) {
-            manageError();
+            addError(LexicalErrorFCTY.INVALID_CHARACTER.getErrorType());
             return;
         }
         if (isNewline()) {
-            manageNewline();
+            addIndentation();
             return;
         }
         Token token = new Token(getTokenType(), currentLine, currentColumn, lexeme.toString());
@@ -52,12 +59,12 @@ public class Scanner {
     }
 
 
-    private void manageNewline() {
+    private void addIndentation() {
         Token token = new Token(getTokenType(), currentLine, currentColumn, lexeme.substring(0, 1));
         tokens.add(token);
         String spaces = lexeme.substring(1);
         if (indentationCtrl.isInconsistentDedent(spaces)) {
-            manageError();
+            addError(LexicalErrorFCTY.INCONSISTENT_DEDENT.getErrorType());
             return;
         }
         var indTokens = indentationCtrl.getIndentationTokens(spaces);
@@ -70,28 +77,18 @@ public class Scanner {
         }
     }
 
-    private void manageError() {
-        if (currentState == State.S1) {
-            System.out.println("Inconsistent Dedent Error");
-        } else {
-            System.out.println("Invalid character error");
-        }
+    private void addError(ErrorType errorType) {
+        errors.add(new Error(errorType, currentLine, currentColumn));
     }
 
-    private void cleanNewlines() {
-
-
-
-    }
-
+    public List<Error> getErrors(){ return errors; }
     private boolean isNewline() {
         return getTokenType() == OtherTypesFCTY.NEWLINE.getTokenType();
     }
 
     private TokenType getTokenType() {
         if (currentState == State.S57) return kwIdSorter.sortGetTokenType(lexeme.toString());
-
-        // if currentState doesn't have a tokenType, then it means it's not an acceptance state, so it generates an UNIDENTIFIED token
+        // if currentState doesn't have a tokenType, then it means it's not an acceptance state, so it generates an error
         return currentState.getTokenType().get();
     }
 
@@ -129,13 +126,14 @@ public class Scanner {
 
     public Scanner(char[] srcContent) {
         this.charStream = srcContent;
-        currentLine = 0;
-        currentColumn = 0;
+        currentLine = 1;
+        currentColumn = 1;
         currentPosition = -1;
         currentChar = 0;
         currentState = State.S0;
         lexeme = new StringBuilder();
         tokens = new ArrayList<>();
+        errors = new ArrayList<>();
         transitionTable = new TransitionTable();
         kwIdSorter = new KwIdSorter();
         indentationCtrl = new IndentationController();

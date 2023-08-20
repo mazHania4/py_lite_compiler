@@ -1,7 +1,8 @@
 package com.lfp.py_lite_compiler;
 
 import com.lfp.py_lite_compiler.controller.scanner.ScannerInitializer;
-import com.lfp.py_lite_compiler.model.Token;
+import com.lfp.py_lite_compiler.model.errors.Error;
+import com.lfp.py_lite_compiler.model.tokens.Token;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
@@ -39,11 +41,17 @@ public class MainWindowController implements Initializable {
 
     @FXML
     protected void onRunButtonClick() {
-        var tokens = new ScannerInitializer().getScannerFromContent(srcCode.getText()).analyze();
+        var scanner = new ScannerInitializer().getScannerFromContent(srcCode.getText());
+        var tokens = scanner.analyze();
+        var errors = scanner.getErrors();
         tokenList = FXCollections.observableArrayList(tokens);
         tokenTable.setItems(tokenList);
+        errorOutput.setText(getErrorMessages(errors));
     }
 
+    private String getErrorMessages(List<Error> errors){
+        return "errores";
+    }
     @FXML
     protected void onHelpButtonClick() {
         System.out.println("presiono ayuda");

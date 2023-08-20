@@ -1,6 +1,6 @@
-package com.lfp.py_lite_compiler.controller.scanner;
+package com.lfp.py_lite_compiler.controller.scanner.states;
 
-import java.util.Optional;
+import com.lfp.py_lite_compiler.controller.scanner.states.State;
 
 public class TransitionTable {
     private final State[][] table;

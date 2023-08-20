@@ -1,9 +1,9 @@
-package com.lfp.py_lite_compiler.controller.scanner;
+package com.lfp.py_lite_compiler.controller.scanner.states;
 
-import com.lfp.py_lite_compiler.model.token_types.DelimiterFCTY;
-import com.lfp.py_lite_compiler.model.token_types.OperatorFCTY;
-import com.lfp.py_lite_compiler.model.token_types.OtherTypesFCTY;
-import com.lfp.py_lite_compiler.model.token_types.TokenType;
+import com.lfp.py_lite_compiler.model.tokens.token_types.DelimiterFCTY;
+import com.lfp.py_lite_compiler.model.tokens.token_types.OperatorFCTY;
+import com.lfp.py_lite_compiler.model.tokens.token_types.OtherTypesFCTY;
+import com.lfp.py_lite_compiler.model.tokens.token_types.TokenType;
 
 import java.util.Optional;
 

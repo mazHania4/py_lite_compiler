@@ -1,18 +1,16 @@
 package com.lfp.py_lite_compiler.controller.scanner;
 
-import com.lfp.py_lite_compiler.model.Token;
-import com.lfp.py_lite_compiler.model.token_types.OtherTypesFCTY;
-import com.lfp.py_lite_compiler.model.token_types.TokenType;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Stack;
+import com.lfp.py_lite_compiler.model.tokens.Token;
+import com.lfp.py_lite_compiler.model.tokens.token_types.OtherTypesFCTY;
+import java.util.*;
 
 public class IndentationController {
 
-    private Stack<Integer> indentationStack;
+    private final Stack<Integer> indentationStack;
 
+    public void cleanInvalidNewlines(List<Token> tokens) {
+     //pending
+    }
     public Optional<Token[]> getIndentationTokens(String spaces) {
         int numSpaces = spaces.length();
         List<Token> tokens = new ArrayList<>();
@@ -32,7 +30,7 @@ public class IndentationController {
         return Optional.of(tokens.toArray(tokensArray));
     }
 
-    public boolean isInconsistentDedent(String spaces){
+    public boolean isInconsistentDedent(String spaces) {
         return (indentationStack.peek() > spaces.length()) && !(indentationStack.contains(spaces.length()));
     }
 

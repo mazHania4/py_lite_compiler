@@ -1,4 +1,4 @@
-package com.lfp.py_lite_compiler.model.token_types;
+package com.lfp.py_lite_compiler.model.tokens.token_types;
 
 public enum DelimiterFCTY {
 

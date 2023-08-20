@@ -1,6 +1,6 @@
-package com.lfp.py_lite_compiler.model;
+package com.lfp.py_lite_compiler.model.tokens;
 
-import com.lfp.py_lite_compiler.model.token_types.TokenType;
+import com.lfp.py_lite_compiler.model.tokens.token_types.TokenType;
 import lombok.*;
 
 @Getter @Setter @AllArgsConstructor @ToString
