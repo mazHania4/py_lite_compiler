@@ -7,6 +7,7 @@ import com.lfp.py_lite_compiler.model.errors.error_types.LexicalErrorFCTY;
 import com.lfp.py_lite_compiler.model.tokens.Token;
 import com.lfp.py_lite_compiler.model.tokens.token_types.OtherTypesFCTY;
 import com.lfp.py_lite_compiler.model.tokens.token_types.TokenType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class Scanner {
             currentState = State.S0;
             lexeme.delete(0, lexeme.length());
         }
-        for (Token tkn:tokens) {
+        for (Token tkn : tokens) {
             System.out.println(tkn.toString());
         }
         indentationCtrl.cleanInvalidNewlines(tokens);
@@ -37,6 +38,10 @@ public class Scanner {
     }
 
     private void findToken() {
+        if (nextIsErrorState()) {
+            moveOnToNextCharAndState();
+            return;
+        }
         while (!nextIsErrorState()) {
             moveOnToNextCharAndState();
             if ((currentState == State.S0) || (currentState == State.S55))
@@ -81,7 +86,10 @@ public class Scanner {
         errors.add(new Error(errorType, currentLine, currentColumn));
     }
 
-    public List<Error> getErrors(){ return errors; }
+    public List<Error> getErrors() {
+        return errors;
+    }
+
     private boolean isNewline() {
         return getTokenType() == OtherTypesFCTY.NEWLINE.getTokenType();
     }
@@ -118,10 +126,10 @@ public class Scanner {
     }
 
     private boolean isEndOfPhysicalLine() {
-        if (currentPosition + 1 < charStream.length) {
-            return (charStream[currentPosition] == 10) || (charStream[currentPosition] == 13);
+        if (currentPosition + 1 == charStream.length) {
+            return false;
         }
-        return true;
+        return (charStream[currentPosition] == 10) || (charStream[currentPosition] == 13);
     }
 
     public Scanner(char[] srcContent) {

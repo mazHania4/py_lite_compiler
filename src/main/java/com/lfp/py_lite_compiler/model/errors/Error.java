@@ -11,4 +11,9 @@ public class Error {
     private ErrorType errorType;
     private int startLine;
     private int startColumn;
+
+    public String getMessage(){
+        return ("> " + errorType.getName() + ": " + errorType.getDescription()
+        + "\n on line: " + startLine + ", column: " + startColumn);
+    }
 }

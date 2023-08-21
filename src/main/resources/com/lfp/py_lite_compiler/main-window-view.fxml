@@ -50,21 +50,21 @@
         <TextArea wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="1" id="srcCode" fx:id="srcCode"/>
     </GridPane>
     <HBox spacing="20">
-        <VBox alignment="CENTER_LEFT" prefHeight="225" prefWidth="560">
+        <VBox alignment="CENTER_LEFT" prefHeight="225" prefWidth="620">
             <Label text="Token reports:"/>
             <TableView fx:id="tokenTable" id="tokenTable">
                 <columns>
-                    <TableColumn fx:id="nameColumn" text="Token name" prefWidth="155"/>
-                    <TableColumn fx:id="patternColumn" text="Pattern" prefWidth="140"/>
-                    <TableColumn fx:id="lexemeColumn" text="Lexeme" prefWidth="145"/>
+                    <TableColumn fx:id="nameColumn" text="Token name" prefWidth="185"/>
+                    <TableColumn fx:id="patternColumn" text="Pattern" prefWidth="150"/>
+                    <TableColumn fx:id="lexemeColumn" text="Lexeme" prefWidth="170"/>
                     <TableColumn fx:id="lineColumn" text="Line" prefWidth="50"/>
                     <TableColumn fx:id="colColumn" text="Col" prefWidth="50"/>
                 </columns>
             </TableView>
         </VBox>
-        <VBox alignment="CENTER_LEFT" prefHeight="200" prefWidth="380">
+        <VBox alignment="CENTER_LEFT" prefHeight="200" prefWidth="320">
             <Label text="Errors:"/>
-            <TextArea wrapText="true" editable="false" id="errorOutput" fx:id="errorOutput"/>
+            <TextArea wrapText="true" style="-fx-text-fill: red" editable="false" id="errorOutput" fx:id="errorOutput"/>
         </VBox>
     </HBox>
 </VBox>

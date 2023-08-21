@@ -50,7 +50,12 @@ public class MainWindowController implements Initializable {
     }
 
     private String getErrorMessages(List<Error> errors){
-        return "errores";
+        StringBuilder buffer = new StringBuilder();
+        for (Error error : errors) {
+            buffer.append(error.getMessage());
+            buffer.append("\n");
+        }
+        return buffer.toString();
     }
     @FXML
     protected void onHelpButtonClick() {
