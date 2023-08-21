@@ -49,7 +49,7 @@
             <Button styleClass="btn, btn-primary" text="Grafico" onAction="#onGraphButtonClick"/>
             <Button styleClass="btn, btn-warning" text="Archivo" onAction="#onFileButtonClick"/>
         </HBox>
-        <CodeArea wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="1" id="srcCode" fx:id="srcCode" styleClass="code_area"/>
+        <CodeArea wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="1" id="srcCode" fx:id="codeArea" styleClass="code_area"/>
     </GridPane>
     <HBox spacing="20">
         <VBox alignment="CENTER_LEFT" prefHeight="225" prefWidth="620">

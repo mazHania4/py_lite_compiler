@@ -1,0 +1,48 @@
+# Esto es un comentario
+
+# Palabras reservadas y operadores
+def main():
+    a = 10
+    b = 20.5
+    suma = a + b
+    resta = a - b
+    multiplicacion = a * b
+    division = a / b
+
+    if suma > 15:
+        print("La suma es mayor que 15")
+    else:
+        print("La suma no es mayor que 15")
+
+    for i in range(5):
+        print(i)
+
+    while a > 0:
+        print(a)
+        a -= 1
+        
+# Python program to display the Fibonacci sequence
+                    
+def recur_fibo(n):
+   if n <= 1:
+       return n
+   else:
+       return(recur_fibo(n-1) + recur_fibo(n-2))
+                    
+nterms = 10
+                    
+# check if the number of terms is valid
+if nterms <= 0:
+   print("Plese enter a positive integer")
+else:
+   print("Fibonacci sequence:")
+   for i in range(nterms):
+       print(recur_fibo(i))
+        
+# Símbolo desconocido
+? = 5
+# Saltos de línea
+print("\nFin del programa")
+# Error de cadena sin cerrar
+cadena = '¡Esta cadena no se cierra correctamente
+
