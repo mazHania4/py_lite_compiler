@@ -6,11 +6,9 @@ import lombok.*;
 public class TokenType {
     private String name;
     private String pattern;
-
     public StringProperty nameProperty() {
         return new SimpleStringProperty(name);
     }
-
     public StringProperty patternProperty() {
         return new SimpleStringProperty(pattern);
     }

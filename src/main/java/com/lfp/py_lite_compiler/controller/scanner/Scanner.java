@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Scanner {
     private final char[] charStream;
-    private int currentLine, currentColumn, currentPosition;
+    private int currentLine, currentColumn, currentPosition, startPosition;
     private char currentChar;
     private State currentState;
     private final StringBuilder lexeme;
@@ -28,6 +28,7 @@ public class Scanner {
             findToken();
             addTokens();
             currentState = State.S0;
+            startPosition = currentPosition+1;
             lexeme.delete(0, lexeme.length());
         }
         for (Token tkn : tokens) {
@@ -44,8 +45,10 @@ public class Scanner {
         }
         while (!nextIsErrorState()) {
             moveOnToNextCharAndState();
-            if ((currentState == State.S0) || (currentState == State.S55))
+            if ((currentState == State.S0) || (currentState == State.S55)) {
+                startPosition = currentPosition + 1;
                 lexeme.delete(0, lexeme.length());
+            }
         }
 
     }
@@ -59,13 +62,13 @@ public class Scanner {
             addIndentation();
             return;
         }
-        Token token = new Token(getTokenType(), currentLine, currentColumn, lexeme.toString());
+        Token token = new Token(getTokenType(), startPosition, currentLine, currentColumn, lexeme.toString());
         tokens.add(token);
     }
 
 
     private void addIndentation() {
-        Token token = new Token(getTokenType(), currentLine, currentColumn, lexeme.substring(0, 1));
+        Token token = new Token(getTokenType(), startPosition, currentLine, currentColumn, lexeme.substring(0, 1));
         tokens.add(token);
         String spaces = lexeme.substring(1);
         if (indentationCtrl.isInconsistentDedent(spaces)) {
@@ -136,6 +139,7 @@ public class Scanner {
         this.charStream = srcContent;
         currentLine = 1;
         currentColumn = 1;
+        startPosition = 0;
         currentPosition = -1;
         currentChar = 0;
         currentState = State.S0;

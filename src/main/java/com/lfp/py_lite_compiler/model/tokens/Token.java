@@ -6,6 +6,7 @@ import lombok.*;
 @Getter @Setter @AllArgsConstructor @ToString
 public class Token{
     private TokenType tokenType;
+    private int startPosition;
     private int line;
     private int column;
     private String lexeme;

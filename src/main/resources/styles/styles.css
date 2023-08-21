@@ -1,0 +1,38 @@
+.keyword {
+    -fx-fill: rgb(179,102,255);
+}
+
+.delimiter_operator {
+    -fx-fill: rgb(102,179,255);
+}
+
+.literal {
+    -fx-fill: rgb(255,187,51);
+}
+
+.comment{
+    -fx-fill: rgb(142,149,156);
+}
+
+.other{
+    -fx-fill: rgb(0,153,102);
+}
+.identifier{
+    -fx-fill: white;
+}
+
+.main_container {
+    -fx-background-color: rgb(108,117,125);
+    -fx-text-fill: white;
+}
+
+.code_area {
+    -fx-font: 14px monospace;
+    -fx-font-style: italic;
+    -fx-padding: 10px;
+    -fx-background-color: rgb(77,85,94);
+}
+
+.bg_blue {
+    -fx-background-color: linear-gradient(to bottom, #345d86 0%,#345d86 100%);
+}

@@ -2,7 +2,6 @@ package com.lfp.py_lite_compiler.model.tokens.token_types;
 
 public enum DelimiterFCTY {
 
-
 DEL_ADD_AND(new TokenType("DEL_ADD_AND", "+=")),
 DEL_SUB_AND(new TokenType("DEL_SUB_AND", "-=")),
 DEL_RETURN_ANNOTATION(new TokenType("DEL_RETURN_ANNOTATION", "->")),
