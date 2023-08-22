@@ -54,7 +54,22 @@
             <artifactId>richtextfx</artifactId>
             <version>0.11.1</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/guru.nidi/graphviz-java -->
+        <dependency>
+            <groupId>guru.nidi</groupId>
+            <artifactId>graphviz-java</artifactId>
+            <version>0.18.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.20.0</version>
+        </dependency>
     </dependencies>
 
     <build>

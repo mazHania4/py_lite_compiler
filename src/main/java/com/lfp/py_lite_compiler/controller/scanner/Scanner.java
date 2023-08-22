@@ -28,7 +28,7 @@ public class Scanner {
             findToken();
             addTokens();
             currentState = State.S0;
-            startPosition = currentPosition+1;
+            startPosition = currentPosition + 1;
             lexeme.delete(0, lexeme.length());
         }
         for (Token tkn : tokens) {

@@ -5,6 +5,8 @@ module com.lfp.py_lite_compiler {
     requires org.kordamp.bootstrapfx.core;
     requires static lombok;
     requires org.fxmisc.richtext;
+    requires org.apache.logging.log4j;
+    requires guru.nidi.graphviz;
 
     exports com.lfp.py_lite_compiler;
     exports com.lfp.py_lite_compiler.model.tokens;

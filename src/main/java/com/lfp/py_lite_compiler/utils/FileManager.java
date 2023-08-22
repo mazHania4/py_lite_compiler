@@ -1,7 +1,6 @@
 package com.lfp.py_lite_compiler.utils;
 
 import java.io.*;
-import java.util.stream.Collectors;
 
 public class FileManager {
     public String getFileContent(File file) {

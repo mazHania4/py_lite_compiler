@@ -5,10 +5,12 @@ import com.lfp.py_lite_compiler.model.errors.Error;
 import com.lfp.py_lite_compiler.model.tokens.Token;
 import com.lfp.py_lite_compiler.utils.FileManager;
 import com.lfp.py_lite_compiler.view.coloring.ColoringController;
+import com.lfp.py_lite_compiler.view.graphviz.GraphGenerator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -72,10 +74,17 @@ public class MainWindowController implements Initializable {
         codeArea.replaceText(fileContent);
     }
 
-    private void runLexicalAnalysis(String srcCode){
-        Scanner scanner = new Scanner(srcCode.toCharArray());
-        tokens = scanner.analyze();
-
+    @FXML
+    protected void onGraphButtonClick() {
+        var graphGenerator = new GraphGenerator();
+        SelectionModel<Token> selectionModel = tokenTable.getSelectionModel();
+        selectionModel.selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            Token selectedToken = null;
+            if (newSelection != null) {
+                selectedToken = newSelection;
+                graphGenerator.lexemeGraph(selectedToken.getLexeme());
+            }
+        });
     }
 
     private String getErrorMessages(List<Error> errors) {
@@ -92,61 +101,55 @@ public class MainWindowController implements Initializable {
         System.out.println("presiono ayuda");
     }
 
-    @FXML
-    protected void onGraphButtonClick() {
-        System.out.println("presiono grafico");
-    }
-
-
     private String sampleCode =
             """
-# Esto es un comentario
+                    # Esto es un comentario
 
-# Palabras reservadas y operadores
-def main():
-    a = 10
-    b = 20.5
-    suma = a + b
-    resta = a - b
-    multiplicacion = a * b
-    division = a / b
+                    # Palabras reservadas y operadores
+                    def main():
+                        a = 10
+                        b = 20.5
+                        suma = a + b
+                        resta = a - b
+                        multiplicacion = a * b
+                        division = a / b
 
-    if suma > 15:
-        print("La suma es mayor que 15")
-    else:
-        print("La suma no es mayor que 15")
+                        if suma > 15:
+                            print("La suma es mayor que 15")
+                        else:
+                            print("La suma no es mayor que 15")
 
-    for i in range(5):
-        print(i)
+                        for i in range(5):
+                            print(i)
 
-    while a > 0:
-        print(a)
-        a -= 1
-        
-# Python program to display the Fibonacci sequence
-                    
-def recur_fibo(n):
-   if n <= 1:
-       return n
-   else:
-       return(recur_fibo(n-1) + recur_fibo(n-2))
-                    
-nterms = 10
-                    
-# check if the number of terms is valid
-if nterms <= 0:
-   print("Plese enter a positive integer")
-else:
-   print("Fibonacci sequence:")
-   for i in range(nterms):
-       print(recur_fibo(i))
-        
-# Símbolo desconocido
-? = 5
-# Saltos de línea
-print("\\nFin del programa")
-# Error de cadena sin cerrar
-cadena = '¡Esta cadena no se cierra correctamente
+                        while a > 0:
+                            print(a)
+                            a -= 1
+                            
+                    # Python program to display the Fibonacci sequence
+                                        
+                    def recur_fibo(n):
+                       if n <= 1:
+                           return n
+                       else:
+                           return(recur_fibo(n-1) + recur_fibo(n-2))
+                                        
+                    nterms = 10
+                                        
+                    # check if the number of terms is valid
+                    if nterms <= 0:
+                       print("Plese enter a positive integer")
+                    else:
+                       print("Fibonacci sequence:")
+                       for i in range(nterms):
+                           print(recur_fibo(i))
+                            
+                    # Símbolo desconocido
+                    ? = 5
+                    # Saltos de línea
+                    print("\\nFin del programa")
+                    # Error de cadena sin cerrar
+                    cadena = '¡Esta cadena no se cierra correctamente
 
-                                            """;
+                                                                """;
 }
