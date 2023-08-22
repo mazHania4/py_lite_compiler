@@ -33,6 +33,9 @@
     -fx-background-color: rgb(77,85,94);
 }
 
-.bg_blue {
-    -fx-background-color: linear-gradient(to bottom, #345d86 0%,#345d86 100%);
+.banner {
+    -fx-background-color: rgb(38,80,125);
+    -fx-text-fill: rgb(255, 211, 66);
+    -fx-font: 28px monospace;
+    -fx-font-weight: bold;
 }

@@ -16,24 +16,22 @@
 <?import org.fxmisc.richtext.CodeArea?>
 
 
-<VBox spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+<VBox spacing="25" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.lfp.py_lite_compiler.MainWindowController" styleClass="main_container">
     <padding>
         <Insets top="15" right="15" bottom="15" left="15"/>
     </padding>
-    <Panel styleClass="panel-primary">
-        <heading>
-            <BorderPane>
+
+            <BorderPane styleClass="banner" prefHeight="70">
                 <center>
-                    <Label styleClass="h2" text="PARSER-PY"/>
+                    <Label styleClass="h2" text="P A R S E R - P Y"/>
                 </center>
                 <bottom>
                     <Button BorderPane.alignment="TOP_RIGHT" styleClass="btn, btn-xs, btn-info" text="Ayuda"
                             onAction="#onHelpButtonClick"/>
                 </bottom>
             </BorderPane>
-        </heading>
-    </Panel>
+
     <GridPane>
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
@@ -46,26 +44,39 @@
         <Label text="Codigo fuente:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
         <HBox alignment="CENTER_RIGHT" layoutY="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
             <Button styleClass="btn, btn-success" text=">>" onAction="#onRunButtonClick"/>
-            <Button styleClass="btn, btn-primary" text="Grafico" onAction="#onGraphButtonClick"/>
             <Button styleClass="btn, btn-warning" text="Archivo" onAction="#onFileButtonClick"/>
         </HBox>
-        <CodeArea wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="1" id="srcCode" fx:id="codeArea" styleClass="code_area"/>
+        <CodeArea wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="1" id="srcCode" fx:id="codeArea"
+                  styleClass="code_area"/>
     </GridPane>
     <HBox spacing="20">
-        <VBox alignment="CENTER_LEFT" prefHeight="225" prefWidth="620">
-            <Label text="Token reports:"/>
-            <TableView fx:id="tokenTable" id="tokenTable">
-                <columns>
-                    <TableColumn fx:id="nameColumn" text="Token name" prefWidth="185"/>
-                    <TableColumn fx:id="patternColumn" text="Pattern" prefWidth="150"/>
-                    <TableColumn fx:id="lexemeColumn" text="Lexeme" prefWidth="170"/>
-                    <TableColumn fx:id="lineColumn" text="Line" prefWidth="50"/>
-                    <TableColumn fx:id="colColumn" text="Col" prefWidth="50"/>
-                </columns>
-            </TableView>
+        <VBox spacing="5" alignment="CENTER_LEFT" prefHeight="225" prefWidth="620">
+            <GridPane >
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints maxHeight="30.0" minHeight="20.0" prefHeight="25" vgrow="SOMETIMES"/>
+                    <RowConstraints maxHeight="Infinity" minHeight="10.0" prefHeight="200" vgrow="ALWAYS"/>
+                </rowConstraints>
+                <Label text="Reporte de Tokens:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <HBox alignment="CENTER_RIGHT" layoutY="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Button styleClass="btn, btn-primary" text="Grafico" onAction="#onGraphButtonClick"/>
+                </HBox>
+                <TableView fx:id="tokenTable" id="tokenTable" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                    <columns>
+                        <TableColumn fx:id="nameColumn" text="Token name" prefWidth="185"/>
+                        <TableColumn fx:id="patternColumn" text="Pattern" prefWidth="150"/>
+                        <TableColumn fx:id="lexemeColumn" text="Lexeme" prefWidth="170"/>
+                        <TableColumn fx:id="lineColumn" text="Line" prefWidth="50"/>
+                        <TableColumn fx:id="colColumn" text="Col" prefWidth="50"/>
+                    </columns>
+                </TableView>
+            </GridPane>
         </VBox>
         <VBox alignment="CENTER_LEFT" prefHeight="200" prefWidth="320">
-            <Label text="Errors:"/>
+            <Label text="Errores:"/>
             <TextArea wrapText="true" style="-fx-text-fill: red" editable="false" id="errorOutput" fx:id="errorOutput"/>
         </VBox>
     </HBox>
