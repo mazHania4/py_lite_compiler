@@ -17,7 +17,7 @@ public class Scanner {
     private char currentChar;
     private State currentState;
     private final StringBuilder lexeme;
-    private List<Token> tokens;
+    private final List<Token> tokens;
     private final List<Error> errors;
     private final TransitionTable transitionTable;
     private final KwIdSorter kwIdSorter;
@@ -31,10 +31,6 @@ public class Scanner {
             startPosition = currentPosition + 1;
             lexeme.delete(0, lexeme.length());
         }
-        for (Token tkn : tokens) {
-            System.out.println(tkn.toString());
-        }
-        indentationCtrl.cleanInvalidNewlines(tokens);
         return tokens;
     }
 
@@ -68,19 +64,23 @@ public class Scanner {
 
 
     private void addIndentation() {
-        Token token = new Token(getTokenType(), startPosition, currentLine, currentColumn, lexeme.substring(0, 1));
-        tokens.add(token);
         String spaces = lexeme.substring(1);
-        if (indentationCtrl.isInconsistentDedent(spaces)) {
-            addError(LexicalErrorFCTY.INCONSISTENT_DEDENT.getErrorType());
-            return;
+        if ((tokens.size() > 0) && (tokens.get(tokens.size() - 1).getTokenType() != OtherTypesFCTY.NEWLINE.getTokenType())) {
+            Token token = new Token(getTokenType(), startPosition, currentLine, currentColumn, lexeme.substring(0, 1));
+            tokens.add(token);
         }
-        var indTokens = indentationCtrl.getIndentationTokens(spaces);
-        if (indTokens.isPresent()) {
-            for (Token indToken : indTokens.get()) {
-                indToken.setLine(currentLine);
-                indToken.setColumn(indToken.getColumn() + currentColumn);
-                tokens.add(indToken);
+        if (!nextIsEndOfPhysicalLineOrComment()) {
+            if (indentationCtrl.isInconsistentDedent(spaces)) {
+                addError(LexicalErrorFCTY.INCONSISTENT_DEDENT.getErrorType());
+                return;
+            }
+            var indTokens = indentationCtrl.getIndentationTokens(spaces);
+            if (indTokens.isPresent()) {
+                for (Token indToken : indTokens.get()) {
+                    indToken.setLine(currentLine);
+                    indToken.setColumn(indToken.getColumn() + currentColumn);
+                    tokens.add(indToken);
+                }
             }
         }
     }
@@ -133,6 +133,13 @@ public class Scanner {
             return false;
         }
         return (charStream[currentPosition] == 10) || (charStream[currentPosition] == 13);
+    }
+
+    private boolean nextIsEndOfPhysicalLineOrComment() {
+        if (currentPosition + 1 == charStream.length) {
+            return false;
+        }
+        return (charStream[currentPosition + 1] == 10) || (charStream[currentPosition + 1] == 13) || (charStream[currentPosition + 1] == 35);
     }
 
     public Scanner(char[] srcContent) {

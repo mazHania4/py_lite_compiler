@@ -34,7 +34,6 @@ public class MainWindowController implements Initializable {
     private CodeArea codeArea;
     @FXML
     private TextArea errorOutput;
-    private List<Token> tokens;
     private Token selectedToken;
     private ObservableList<Token> tokenList = FXCollections.observableArrayList();
     @FXML
@@ -63,7 +62,7 @@ public class MainWindowController implements Initializable {
     @FXML
     protected void onRunButtonClick() {
         Scanner scanner = new Scanner(codeArea.getText().toCharArray());
-        tokens = scanner.analyze();
+        List<Token> tokens = scanner.analyze();
         codeArea.setStyleSpans(0, colorCtrl.getStyleSpans(tokens, codeArea.getText()));
         tokenList = FXCollections.observableArrayList(tokens);
         tokenTable.setItems(tokenList);

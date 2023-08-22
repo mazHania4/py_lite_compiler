@@ -1,7 +1,5 @@
 package com.lfp.py_lite_compiler.controller.scanner.states;
 
-import com.lfp.py_lite_compiler.controller.scanner.states.State;
-
 public class TransitionTable {
     private final State[][] table;
 
@@ -85,6 +83,7 @@ public class TransitionTable {
         table[State.S55.ordinal()][13] = State.S1;
         setStateOnInterval(48, 57, State.S57, State.S57);
         setStateOnInterval(65, 90, State.S57, State.S57);
+        table[State.S57.ordinal()][95] = State.S57;
         setStateOnInterval(97, 122, State.S57, State.S57);
         table[State.S58.ordinal()][46] = State.S59;
         setStateOnInterval(48, 57, State.S58, State.S58);

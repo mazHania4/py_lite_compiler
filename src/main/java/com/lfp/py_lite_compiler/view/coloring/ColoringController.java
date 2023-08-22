@@ -1,8 +1,6 @@
 package com.lfp.py_lite_compiler.view.coloring;
 
 import com.lfp.py_lite_compiler.model.tokens.Token;
-import com.lfp.py_lite_compiler.model.tokens.token_types.KeywordFCTY;
-import com.lfp.py_lite_compiler.model.tokens.token_types.OperatorFCTY;
 import com.lfp.py_lite_compiler.model.tokens.token_types.TokenType;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
@@ -13,15 +11,12 @@ import java.util.List;
 
 public class ColoringController {
 
-    private List<Token> tokens;
-
     public StyleSpans<Collection<String>> getStyleSpans(List<Token> tokens, String srcCode) {
         StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
         int lastTokenEnd = 0;
         for (Token token : tokens) {
             int tokenStart = token.getStartPosition();
             int tokenEnd = tokenStart + token.getLexeme().length();
-            //int length = Math.max((tokenStart - lastTokenEnd), 0);
             if (tokenEnd > lastTokenEnd) {
                 String styleClass = determineStyleClass(token.getTokenType());
                 spansBuilder.add(Collections.emptyList(), tokenStart - lastTokenEnd);
@@ -30,8 +25,6 @@ public class ColoringController {
             }
         }
         spansBuilder.add(Collections.emptyList(), srcCode.length() - lastTokenEnd);
-
-
         return spansBuilder.create();
     }
 

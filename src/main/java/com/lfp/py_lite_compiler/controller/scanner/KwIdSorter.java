@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class KwIdSorter {
 
-    private HashMap<String, TokenType> keywords;
+    private final HashMap<String, TokenType> keywords;
 
     public KwIdSorter() {
         keywords = new HashMap<>();
