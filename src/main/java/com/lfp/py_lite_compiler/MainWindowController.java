@@ -10,11 +10,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
@@ -31,6 +35,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private TextArea errorOutput;
     private List<Token> tokens;
+    private Token selectedToken;
     private ObservableList<Token> tokenList = FXCollections.observableArrayList();
     @FXML
     private TableView<Token> tokenTable;
@@ -43,6 +48,10 @@ public class MainWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         colorCtrl = new ColoringController();
         tokenTable.setItems(tokenList);
+        SelectionModel<Token> selectionModel = tokenTable.getSelectionModel();
+        selectionModel.selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            selectedToken = newSelection;
+        });
         nameColumn.setCellValueFactory(data -> data.getValue().getTokenType().nameProperty());
         patternColumn.setCellValueFactory(data -> data.getValue().getTokenType().patternProperty());
         lexemeColumn.setCellValueFactory(new PropertyValueFactory<>("lexeme"));
@@ -50,7 +59,6 @@ public class MainWindowController implements Initializable {
         colColumn.setCellValueFactory(new PropertyValueFactory<>("column"));
         codeArea.appendText(sampleCode);
     }
-
 
     @FXML
     protected void onRunButtonClick() {
@@ -77,14 +85,15 @@ public class MainWindowController implements Initializable {
     @FXML
     protected void onGraphButtonClick() {
         var graphGenerator = new GraphGenerator();
-        SelectionModel<Token> selectionModel = tokenTable.getSelectionModel();
-        selectionModel.selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            Token selectedToken = null;
-            if (newSelection != null) {
-                selectedToken = newSelection;
-                graphGenerator.lexemeGraph(selectedToken.getLexeme());
-            }
-        });
+        graphGenerator.lexemeGraph(selectedToken.getLexeme());
+        Stage popupStage = new Stage();
+        popupStage.setTitle("Generated graph");
+        Image image = new Image("file:src/main/resources/generated/graph.png");
+        ImageView imageView = new ImageView(image);
+        StackPane layout = new StackPane(imageView);
+        Scene popupScene = new Scene(layout);
+        popupStage.setScene(popupScene);
+        popupStage.show();
     }
 
     private String getErrorMessages(List<Error> errors) {
