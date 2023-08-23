@@ -29,7 +29,6 @@
 .code_area {
     -fx-font: 14px monospace;
     -fx-font-style: italic;
-    -fx-padding: 10px;
     -fx-background-color: rgb(77,85,94);
 }
 

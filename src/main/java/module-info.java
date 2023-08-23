@@ -7,6 +7,8 @@ module com.lfp.py_lite_compiler {
     requires org.fxmisc.richtext;
     requires org.apache.logging.log4j;
     requires guru.nidi.graphviz;
+    requires reactfx;
+    requires org.fxmisc.flowless;
 
     exports com.lfp.py_lite_compiler;
     exports com.lfp.py_lite_compiler.model.tokens;

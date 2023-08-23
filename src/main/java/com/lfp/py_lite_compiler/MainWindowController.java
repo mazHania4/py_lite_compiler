@@ -10,11 +10,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.SelectionModel;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,7 +20,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
-
+import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.flowless.VirtualizedScrollPane;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -56,6 +55,7 @@ public class MainWindowController implements Initializable {
         lexemeColumn.setCellValueFactory(new PropertyValueFactory<>("lexeme"));
         lineColumn.setCellValueFactory(new PropertyValueFactory<>("line"));
         colColumn.setCellValueFactory(new PropertyValueFactory<>("column"));
+        codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         codeArea.appendText(sampleCode);
     }
 
