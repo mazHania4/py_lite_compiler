@@ -1,0 +1,22 @@
+#key word
+and
+as 
+assert
+break
+class
+continue 
+def
+del 
+elif 
+else 
+except 
+False 
+finally 
+for
+
+
+#errores
+$""
+"cadena"
+
+def 444+miVariable
