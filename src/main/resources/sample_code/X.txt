@@ -1,0 +1,42 @@
+
+
+# identificadores 
+miVariable  asignacionX
+
+# aritmeticos
+
+5++5 1.2**3  2//2
+
+## comparacion
+
+==
+
+# ## logicos
+
+and or
+
+## # kw
+
+def class async else if for is in import lambdaa
+
+
+## constantes
+
+"cadena con espacios" 'comilla simple' 1 2 1.2 2.1 
+
+## otros 
+
+(x,y))) ( XX, yYY( . :  {}{{ .,,.
+
+1(
+
+
+asignacion +=
+aritmetico + ** 
+parentesis ( 7()((
+id
+'¡X ha ganado, bien hecho!'
+
+snake_food.goto
+
+segments

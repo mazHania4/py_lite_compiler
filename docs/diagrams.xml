@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-08-19T09:30:03.492Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" etag="wQB0kbDGmFqAgfpl9Qcf" version="21.6.8" type="device" pages="3">
+<mxfile host="app.diagrams.net" modified="2023-09-23T16:52:27.448Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36" etag="VJbmAd8VMnrnRtwqBdVY" version="21.7.5" type="device" pages="3">
   <diagram name="token_types" id="ra3gYBbPfFnfuH0-lwYc">
-    <mxGraphModel dx="1050" dy="1743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1674" dy="1955" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -196,37 +196,8 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="xF26bXirJi-wlU_1vMPD" name="class_diagram">
-    <mxGraphModel dx="1502" dy="574" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
-      <root>
-        <mxCell id="0" />
-        <mxCell id="1" parent="0" />
-        <mxCell id="62yTiPbENLwEMOEAoQnr-3" value="" style="group" parent="1" vertex="1" connectable="0">
-          <mxGeometry x="40" y="40" width="470" height="360" as="geometry" />
-        </mxCell>
-        <mxCell id="62yTiPbENLwEMOEAoQnr-1" value="" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=110;tabHeight=20;tabPosition=left;html=1;whiteSpace=wrap;" parent="62yTiPbENLwEMOEAoQnr-3" vertex="1">
-          <mxGeometry width="470" height="360" as="geometry" />
-        </mxCell>
-        <mxCell id="62yTiPbENLwEMOEAoQnr-2" value="Model" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="62yTiPbENLwEMOEAoQnr-3" vertex="1">
-          <mxGeometry width="110" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="62yTiPbENLwEMOEAoQnr-4" value="Classname" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="120" y="180" width="140" height="104" as="geometry" />
-        </mxCell>
-        <mxCell id="62yTiPbENLwEMOEAoQnr-5" value="+ field: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="62yTiPbENLwEMOEAoQnr-4" vertex="1">
-          <mxGeometry y="26" width="140" height="26" as="geometry" />
-        </mxCell>
-        <mxCell id="62yTiPbENLwEMOEAoQnr-6" value="+ field: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="62yTiPbENLwEMOEAoQnr-4" vertex="1">
-          <mxGeometry y="52" width="140" height="26" as="geometry" />
-        </mxCell>
-        <mxCell id="62yTiPbENLwEMOEAoQnr-7" value="+ field: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="62yTiPbENLwEMOEAoQnr-4" vertex="1">
-          <mxGeometry y="78" width="140" height="26" as="geometry" />
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="g6UNMViKsKU2nWY_fW8M" name="Estados">
-    <mxGraphModel dx="1877" dy="1743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+  <diagram id="g6UNMViKsKU2nWY_fW8M" name="Lexical States">
+    <mxGraphModel dx="2501" dy="1955" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -978,7 +949,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="BH1aAlWBoGmbR9sOdvMB-1" value="13 || 10" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="D0ssQLM44G8YbCdMSyxB-26">
+        <mxCell id="BH1aAlWBoGmbR9sOdvMB-1" value="13 || 10" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="D0ssQLM44G8YbCdMSyxB-26" vertex="1" connectable="0">
           <mxGeometry x="-0.1298" y="3" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -1177,6 +1148,14 @@
         <mxCell id="qwN_bWJPDUsC42tLVo6Z-6" value="S56" style="ellipse;shape=doubleEllipse;html=1;dashed=0;whiteSpace=wrap;aspect=fixed;" parent="1" vertex="1">
           <mxGeometry x="62.94999999999999" y="880" width="40" height="40" as="geometry" />
         </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="Q-NWLKowRZ2HrWMRnrZv" name="Página-4">
+    <mxGraphModel dx="1674" dy="786" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
       </root>
     </mxGraphModel>
   </diagram>
