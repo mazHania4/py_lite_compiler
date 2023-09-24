@@ -28,7 +28,7 @@ public class Scanner {
             findToken();
             addTokens();
             currentState = State.S0;
-            startPosition = currentPosition + 1;
+            startPosition = currentPosition;
             lexeme.delete(0, lexeme.length());
         }
         return tokens;
@@ -42,7 +42,7 @@ public class Scanner {
         while (!nextIsErrorState()) {
             moveOnToNextCharAndState();
             if ((currentState == State.S0) || (currentState == State.S55)) {
-                startPosition = currentPosition + 1;
+                startPosition = currentPosition;
                 lexeme.delete(0, lexeme.length());
             }
         }
@@ -144,8 +144,8 @@ public class Scanner {
 
     public Scanner(char[] srcContent) {
         this.charStream = srcContent;
-        currentLine = 1;
-        currentColumn = 1;
+        currentLine = 0;
+        currentColumn = 0;
         startPosition = 0;
         currentPosition = -1;
         currentChar = 0;
