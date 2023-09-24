@@ -4,6 +4,7 @@ public class TransitionTable {
     private final State[][] table;
 
     public State getState(State initState, char inputSymbol) {
+        inputSymbol = ((inputSymbol > 255)) ? 256 : inputSymbol;
         var state = table[initState.ordinal()][inputSymbol];
         return state == null ? State.S63 : state;
     }
@@ -13,7 +14,7 @@ public class TransitionTable {
         }
     }
     public TransitionTable() {
-        table = new State[State.values().length][256];
+        table = new State[State.values().length][257];
         table[State.S0.ordinal()][10] = State.S1;
         table[State.S0.ordinal()][13] = State.S1;
         table[State.S0.ordinal()][32] = State.S0;
@@ -74,11 +75,11 @@ public class TransitionTable {
         table[State.S37.ordinal()][61] = State.S38;
         table[State.S40.ordinal()][61] = State.S41;
         setStateOnInterval(48, 57, State.S50, State.S59);
-        setStateOnInterval(0, 255, State.S51, State.S51);
+        setStateOnInterval(0, 256, State.S51, State.S51);
         table[State.S51.ordinal()][39] = State.S52;
-        setStateOnInterval(0, 255, State.S53, State.S53);
+        setStateOnInterval(0, 256, State.S53, State.S53);
         table[State.S53.ordinal()][34] = State.S54;
-        setStateOnInterval(0, 255, State.S55, State.S55);
+        setStateOnInterval(0, 256, State.S55, State.S55);
         table[State.S55.ordinal()][10] = State.S1;
         table[State.S55.ordinal()][13] = State.S1;
         setStateOnInterval(48, 57, State.S57, State.S57);
