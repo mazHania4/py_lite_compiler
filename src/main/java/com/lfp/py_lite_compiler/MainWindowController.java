@@ -61,7 +61,7 @@ public class MainWindowController implements Initializable {
 
     @FXML
     protected void onRunButtonClick() {
-        Scanner scanner = new Scanner(("\n" + codeArea.getText()).toCharArray());
+        Scanner scanner = new Scanner(("\n" + codeArea.getText() + "\n").toCharArray());
         List<Token> tokens = scanner.analyze();
         codeArea.setStyleSpans(0, colorCtrl.getStyleSpans(tokens, codeArea.getText()));
         tokenList = FXCollections.observableArrayList(tokens);
