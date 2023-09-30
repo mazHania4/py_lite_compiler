@@ -1,0 +1,334 @@
+statements: statement _statements
+_statements: 
+    | statement _statements
+    | ε
+
+
+statement: compound_stmt | simple_stmts 
+
+simple_stmts:
+    | simple_stmt _simple_stmts ';' NEWLINE
+    | simple_stmt _simple_stmts NEWLINE
+_simple_stmts:
+    | ';' simple_stmt _simple_stmts
+    | ε
+
+simple_stmt:
+    | assignment
+    | expressions 
+    | return_stmt
+    | 'pass' 
+    | 'break' 
+    | 'continue' 
+
+compound_stmt:
+    | function_def
+    | if_stmt
+    | for_stmt
+    | while_stmt
+
+assignment:
+    | NAME ':' expression '=' expressions  
+    | NAME ':' expression 
+    | ('(' single_target ')' | single_subscript_attribute_target) ':' expression '=' expressions 
+    | ('(' single_target ')' | single_subscript_attribute_target) ':' expression 
+    | targets _assignment expressions
+    | single_target augassign ~ expressions
+_assignment:
+    | targets '=' _assignment
+    | ε
+
+augassign:
+    | '+=' 
+    | '-=' 
+    | '*=' 
+    | '@=' 
+    | '/=' 
+    | '%=' 
+    | '&=' 
+    | '|=' 
+    | '^=' 
+    | '<<=' 
+    | '>>=' 
+    | '**=' 
+    | '//=' 
+
+return_stmt:
+    | 'return' expressions
+    | 'return' 
+
+block:
+    | NEWLINE INDENT statements DEDENT 
+    | simple_stmts
+
+function_def:
+    | 'def' NAME '(' parameters ')' ':' block 
+    | 'def' NAME '(' ')' ':' block 
+
+parameters:
+    | param_no_default _params_n _params_w
+    | param_with_default _params_w
+_params_n:
+    | param_no_default _params_n
+    | ε
+_params_w:
+    | param_with_default _params_w
+    | ε
+
+param_no_default:
+    | param ','  
+    | param &')' 
+param_with_default:
+    | param default ','  
+    | param default &')' 
+param: NAME 
+default: '=' expression
+
+if_stmt:
+    | 'if' expression ':' block elif_stmt 
+    | 'if' expression ':' block else_block 
+    | 'if' expression ':' block 
+elif_stmt:
+    | 'elif' expression ':' block elif_stmt 
+    | 'elif' expression ':' block else_block 
+    | 'elif' expression ':' block
+else_block:
+    | 'else' ':' block 
+
+while_stmt:
+    | 'while' expression ':' block else_block 
+    | 'while' expression ':' block 
+
+for_stmt:
+    | 'for' targets 'in' ~ expressions ':' block else_block 
+    | 'for' targets 'in' ~ expressions ':' block  
+
+expressions:
+    | expression _expressions ',' 
+    | expression _expressions 
+    | expression ',' 
+    | expression
+_expressions:
+    | ',' expression _expressions
+    | ε
+
+expression:
+    | disjunction 'if' disjunction 'else' expression 
+    | disjunction
+
+disjunction:
+    | conjunction _disjunction
+_disjunction:
+    | 'or' conjunction _disjunction
+    | ε
+
+conjunction:
+    | inversion _conjunction
+_conjunction:
+    | 'and' inversion _conjunction
+    | ε
+
+inversion:
+    | 'not' inversion 
+    | comparison
+
+comparison:
+    | bitwise_or compare_op_bitwise_or_pair _comparison 
+    | bitwise_or
+_comparison:
+    | compare_op_bitwise_or_pair _comparison
+    | ε
+
+compare_op_bitwise_or_pair:
+    | eq_bitwise_or
+    | noteq_bitwise_or
+    | lte_bitwise_or
+    | lt_bitwise_or
+    | gte_bitwise_or
+    | gt_bitwise_or
+    | notin_bitwise_or
+    | in_bitwise_or
+    | isnot_bitwise_or
+    | is_bitwise_or
+
+eq_bitwise_or: '==' bitwise_or 
+noteq_bitwise_or: '!=' bitwise_or 
+lte_bitwise_or: '<=' bitwise_or 
+lt_bitwise_or: '<' bitwise_or 
+gte_bitwise_or: '>=' bitwise_or 
+gt_bitwise_or: '>' bitwise_or 
+notin_bitwise_or: 'not' 'in' bitwise_or 
+in_bitwise_or: 'in' bitwise_or 
+isnot_bitwise_or: 'is' 'not' bitwise_or 
+is_bitwise_or: 'is' bitwise_or 
+
+bitwise_or:
+    | bitwise_xor _bitwise_or
+_bitwise_or:
+    | '|' bitwise_xor _bitwise_or
+    | ε
+
+bitwise_xor:
+    | bitwise_and _bitwise_xor
+_bitwise_xor:
+    | '^' bitwise_and _bitwise_xor
+    | ε
+
+bitwise_and:
+    | shift_expr _bitwise_and
+_bitwise_and:
+    | '&' shift_expr _bitwise_and
+    | ε
+
+shift_expr:
+    | sum _shift_expr
+_shift_expr:
+    | '<<' sum _shift_expr
+    | '>>' sum _shift_expr
+    | ε
+
+sum:
+    | term _sum
+_sum:
+    | '+' term _sum
+    | '-' term _sum
+    | ε
+
+term:
+    | factor _term
+_term:
+    | '*' factor _term
+    | '/' factor _term
+    | '//' factor _term
+    | '%' factor _term
+    | '@' factor _term
+    | ε
+
+factor:
+    | '+' factor 
+    | '-' factor 
+    | '~' factor 
+    | power
+
+power:
+    | primary '**' factor 
+    | primary
+
+primary:
+    | atom _primary
+_primary:
+    | '.' NAME _primary
+    | '(' arguments ')' _primary
+    | '(' ')' _primary
+    | ε
+
+atom:
+    | NAME
+    | 'True' 
+    | 'False' 
+    | 'None' 
+    | strings
+    | NUMBER
+    | (tuple | group)
+    | list
+    | (dict | set)
+
+group:
+    | '(' expression ')' 
+
+strings: STRING _strings
+_strings: 
+    | STRING _strings
+    | ε
+
+list:
+    | '[' expressions ']' 
+    | '[' ']' 
+
+tuple:
+    | '(' expressions ',' expressions ')' 
+    | '(' expressions ',' ')' 
+    | '(' ')' 
+
+set: '{' expressions '}' 
+
+dict:
+    | '{' kvpairs '}' 
+    | '{' '}' 
+
+kvpairs: 
+    |kvpair _kvpairs ',' 
+    |kvpair _kvpairs 
+_kvpairs:
+    | ',' kvpair _kvpairs
+    | ε
+
+kvpair: expression ':' expression 
+
+arguments:
+    | args ',' &')' 
+    | args  &')' 
+
+args:
+    | expression _args ',' kwargs
+    | expression _args
+    | kwargs 
+_args:
+    | ',' expression _args
+    | ε
+
+kwargs:
+    | kwarg _kwargs
+_kwargs:
+    | ',' kwarg _kwargs
+    | ε
+
+kwarg:
+    | NAME '=' expression 
+
+targets:
+    | target_with_targ_atom ',' 
+    | target_with_targ_atom  
+    | target_with_targ_atom
+_targets:
+    | ',' target_with_targ_atom _targets
+    | ε
+
+targets_list_seq: 
+    | target_with_targ_atom _targets_seq ',' 
+    | target_with_targ_atom _targets_seq 
+targets_tuple_seq:
+    | target_with_targ_atom _targets_seq ',' 
+    | target_with_targ_atom _targets_seq 
+    | target_with_targ_atom ',' 
+_targets_seq: 
+    |',' target_with_targ_atom _targets_seq
+    | ε
+
+target_with_targ_atom:
+    | t_primary '.' NAME !t_lookahead 
+    | targ_atom
+
+targ_atom:
+    | NAME 
+    | '(' target_with_targ_atom ')' 
+    | '(' targets_tuple_seq ')' 
+    | '(' ')' 
+    | '[' targets_list_seq ']' 
+    | '[' ']' 
+
+single_target:
+    | single_subscript_attribute_target
+    | NAME 
+    | '(' single_target ')' 
+
+single_subscript_attribute_target:
+    | t_primary '.' NAME !t_lookahead 
+
+t_primary:
+    | t_primary '.' NAME &t_lookahead 
+    | t_primary '(' arguments ')' &t_lookahead 
+    | t_primary '(' ')' &t_lookahead 
+    | atom &t_lookahead 
+
+t_lookahead: '(' | '[' | '.'
