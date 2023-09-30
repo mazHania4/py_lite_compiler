@@ -1,7 +1,6 @@
 package com.lfp.py_lite_compiler.controller.scanner;
 
-import com.lfp.py_lite_compiler.model.tokens.token_types.KeywordFCTY;
-import com.lfp.py_lite_compiler.model.tokens.token_types.OtherTypesFCTY;
+import com.lfp.py_lite_compiler.model.tokens.token_types.TokenTypesFCTY;
 import com.lfp.py_lite_compiler.model.tokens.token_types.TokenType;
 import java.util.HashMap;
 
@@ -11,14 +10,15 @@ public class KwIdSorter {
 
     public KwIdSorter() {
         keywords = new HashMap<>();
-        for (KeywordFCTY kw : KeywordFCTY.values()) {
-            keywords.put(kw.getTokenType().getPattern(), kw.getTokenType());
+        var kwTypes = TokenTypesFCTY.values();
+        for (int i = 10; i < 45; i++) {
+            keywords.put(kwTypes[i].get().getPattern(), kwTypes[i].get());
         }
     }
 
     public TokenType sortGetTokenType(String lexeme) {
         TokenType tokenType = keywords.get(lexeme);
-        if (tokenType == null) tokenType = OtherTypesFCTY.IDENTIFIER.getTokenType();
+        if (tokenType == null) tokenType = TokenTypesFCTY.IDENTIFIER.get();
         return tokenType;
     }
 

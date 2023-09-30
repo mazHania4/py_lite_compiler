@@ -5,7 +5,7 @@ import com.lfp.py_lite_compiler.model.errors.Error;
 import com.lfp.py_lite_compiler.model.errors.error_types.ErrorType;
 import com.lfp.py_lite_compiler.model.errors.error_types.LexicalErrorFCTY;
 import com.lfp.py_lite_compiler.model.tokens.Token;
-import com.lfp.py_lite_compiler.model.tokens.token_types.OtherTypesFCTY;
+import com.lfp.py_lite_compiler.model.tokens.token_types.TokenTypesFCTY;
 import com.lfp.py_lite_compiler.model.tokens.token_types.TokenType;
 
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class Scanner {
     private void addIndentation() {
         if (isNotLastCharacter()) {
             String spaces = lexeme.substring(1);
-            if ((tokens.size() > 0) && (tokens.get(tokens.size() - 1).getTokenType() != OtherTypesFCTY.NEWLINE.getTokenType())) {
+            if ((tokens.size() > 0) && (tokens.get(tokens.size() - 1).getTokenType() != TokenTypesFCTY.NEWLINE.get())) {
                 Token token = new Token(getTokenType(), startPosition, currentLine, currentColumn, lexeme.substring(0, 1));
                 tokens.add(token);
             }
@@ -96,7 +96,7 @@ public class Scanner {
     }
 
     private boolean isNewline() {
-        return getTokenType() == OtherTypesFCTY.NEWLINE.getTokenType();
+        return getTokenType() == TokenTypesFCTY.NEWLINE.get();
     }
 
     private TokenType getTokenType() {
