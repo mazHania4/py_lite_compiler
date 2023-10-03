@@ -1,5 +1,6 @@
 package com.lfp.py_lite_compiler;
 
+import com.lfp.py_lite_compiler.controller.parser.Parser;
 import com.lfp.py_lite_compiler.controller.scanner.Scanner;
 import com.lfp.py_lite_compiler.model.errors.Error;
 import com.lfp.py_lite_compiler.model.tokens.Token;
@@ -65,7 +66,8 @@ public class MainWindowController implements Initializable {
         tokenList = FXCollections.observableArrayList(tokens);
         tokenTable.setItems(tokenList);
         var errors = scanner.getErrors();
-        errorOutput.setText(getErrorMessages(errors));
+        var output = new Parser(tokenList).analyze();
+        errorOutput.setText(getErrorMessages(errors) + "\n" + output);
     }
 
     @FXML

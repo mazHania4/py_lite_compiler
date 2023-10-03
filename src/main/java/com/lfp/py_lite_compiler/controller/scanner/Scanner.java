@@ -31,7 +31,19 @@ public class Scanner {
             startPosition = currentPosition;
             lexeme.delete(0, lexeme.length());
         }
+        emptyIndentionPile();
         return tokens;
+    }
+
+    private void emptyIndentionPile() {
+        var dedentTokens = indentationCtrl.getIndentationTokens("");
+        if (dedentTokens.isPresent()) {
+            for (Token dedent : dedentTokens.get()) {
+                dedent.setLine(currentLine);
+                dedent.setColumn(dedent.getColumn() + currentColumn);
+                tokens.add(dedent);
+            }
+        }
     }
 
     private void findToken() {

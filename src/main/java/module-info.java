@@ -11,8 +11,11 @@ module com.lfp.py_lite_compiler {
     requires org.fxmisc.flowless;
 
     exports com.lfp.py_lite_compiler;
+    exports com.lfp.py_lite_compiler.model;
     exports com.lfp.py_lite_compiler.model.tokens;
     exports com.lfp.py_lite_compiler.model.errors;
+    exports com.lfp.py_lite_compiler.model.productions;
     opens com.lfp.py_lite_compiler to javafx.fxml;
     opens com.lfp.py_lite_compiler.model.tokens to javafx.base;
+    exports com.lfp.py_lite_compiler.model.special_symbols;
 }

@@ -1,6 +1,9 @@
 package com.lfp.py_lite_compiler.model.tokens.token_types;
 
-public enum TokenTypesFCTY {
+import com.lfp.py_lite_compiler.model.Stackable;
+import com.lfp.py_lite_compiler.model.StackableType;
+
+public enum TokenTypesFCTY implements Stackable {
 
     LIT_STRING(new TokenType("LIT_STRING", "'[[0-39)U(39-255]]*' | \"[[0-34)U(34-255]]*\"")),
     LIT_INTEGER(new TokenType("LIT_INTEGER", "(0-9)+")),
@@ -12,8 +15,7 @@ public enum TokenTypesFCTY {
     NEWLINE(new TokenType("NEWLINE", "LF | CR")),
     INDENT(new TokenType("INDENT", " ")),
     DEDENT(new TokenType("DEDENT", " ")),
-
-
+    END_OF_FILE(new TokenType("END_OF_FILE", " ")),
 
     KW_AND(new TokenType("KW_AND", "and")),
     KW_AS(new TokenType("KW_AS", "as")),
@@ -63,7 +65,7 @@ public enum TokenTypesFCTY {
     DEL_AND_AND(new TokenType("DEL_AND_AND", "&=")),
     DEL_RIGHT_SHIFT_AND(new TokenType("DEL_RIGHT_SHIFT_AND", ">>=")),
     DEL_LEFT_SHIFT_AND(new TokenType("DEL_LEFT_SHIFT_AND", "<<=")),
-    DEL_MOD_AND(new TokenType("DEL_MOD_AND", "%")),
+    DEL_MOD_AND(new TokenType("DEL_MOD_AND", "%=")),
     DEL_XOR_AND(new TokenType("DEL_XOR_AND", "^=")),
     DEL_AT(new TokenType("DEL_AT", "@")),
     DEL_AT_AND(new TokenType("DEL_AT_AND", "@=")),
@@ -90,7 +92,7 @@ public enum TokenTypesFCTY {
     OP_OR(new TokenType("OP_OR", "|")),
     OP_AND(new TokenType("OP_AND", "&")),
     OP_GREATER_THAN(new TokenType("OP_GREATER_THAN", ">")),
-    OP_GREATER_EQUAL_THAN(new TokenType("OP_GREATER_EQUAL_THAN", "<=")),
+    OP_GREATER_EQUAL_THAN(new TokenType("OP_GREATER_EQUAL_THAN", ">=")),
     OP_RIGHT_SHIFT(new TokenType("OP_RIGHT_SHIFT", ">>")),
     OP_LESS_THAN(new TokenType("OP_LESS_THAN", "<")),
     OP_LESS_EQUAL_THAN(new TokenType("OP_LESS_EQUAL_THAN", "<=")),
@@ -113,4 +115,8 @@ public enum TokenTypesFCTY {
     }
 
 
+    @Override
+    public StackableType getType() {
+        return StackableType.TOKEN;
+    }
 }

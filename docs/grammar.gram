@@ -30,10 +30,13 @@ compound_stmt:
 assignment:
     | NAME ':' expression '=' expressions  
     | NAME ':' expression 
-    | ('(' single_target ')' | single_subscript_attribute_target) ':' expression '=' expressions 
-    | ('(' single_target ')' | single_subscript_attribute_target) ':' expression 
-    | targets _assignment expressions
-    | single_target augassign ~ expressions
+    | '(' single_target ')' ':' expression '=' expressions 
+    | '(' single_target ')' ':' expression 
+    | single_subscript_attribute_target ':' expression '=' expressions 
+    | single_subscript_attribute_target ':' expression 
+    | targets '=' _assignment expressions
+    | single_target augassign expressions
+##    | single_target augassign ~ expressions
 _assignment:
     | targets '=' _assignment
     | ε
@@ -79,10 +82,10 @@ param_no_default:
     | param ','  
     | param &')' 
 param_with_default:
-    | param default ','  
-    | param default &')' 
+    | param _default ','  
+    | param _default &')' 
 param: NAME 
-default: '=' expression
+_default: '=' expression
 
 if_stmt:
     | 'if' expression ':' block elif_stmt 
@@ -100,14 +103,14 @@ while_stmt:
     | 'while' expression ':' block 
 
 for_stmt:
-    | 'for' targets 'in' ~ expressions ':' block else_block 
-    | 'for' targets 'in' ~ expressions ':' block  
+    | 'for' targets 'in' expressions ':' block else_block 
+    | 'for' targets 'in' expressions ':' block  
+##    | 'for' targets 'in' ~ expressions ':' block else_block 
+##    | 'for' targets 'in' ~ expressions ':' block  
 
 expressions:
     | expression _expressions ',' 
     | expression _expressions 
-    | expression ',' 
-    | expression
 _expressions:
     | ',' expression _expressions
     | ε
@@ -229,9 +232,11 @@ atom:
     | 'None' 
     | strings
     | NUMBER
-    | (tuple | group)
+    | tuple 
+    | group
     | list
-    | (dict | set)
+    | dict 
+    | set
 
 group:
     | '(' expression ')' 
@@ -287,9 +292,8 @@ kwarg:
     | NAME '=' expression 
 
 targets:
-    | target_with_targ_atom ',' 
-    | target_with_targ_atom  
-    | target_with_targ_atom
+    | target_with_targ_atom _targets ',' 
+    | target_with_targ_atom _targets
 _targets:
     | ',' target_with_targ_atom _targets
     | ε
@@ -326,9 +330,13 @@ single_subscript_attribute_target:
     | t_primary '.' NAME !t_lookahead 
 
 t_primary:
-    | t_primary '.' NAME &t_lookahead 
-    | t_primary '(' arguments ')' &t_lookahead 
-    | t_primary '(' ')' &t_lookahead 
-    | atom &t_lookahead 
+    | atom _t_primary &t_lookahead
+_t_primary:
+    | '.' NAME _t_primary &t_lookahead
+    | '(' arguments ')' _t_primary &t_lookahead
+    | '(' ')' _t_primary &t_lookahead
+    | ε
 
 t_lookahead: '(' | '[' | '.'
+
+
