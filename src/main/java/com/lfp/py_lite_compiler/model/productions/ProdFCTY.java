@@ -23,8 +23,7 @@ public enum ProdFCTY implements Stackable{
     ))),
 
     simple_stmts( bProd(List.of(
-            bOption(List.of( "simple_stmt", "_simple_stmts", "DEL_SEMICOLON", "NEWLINE" )),
-            bOption(List.of( "simple_stmt", "_simple_stmts", "NEWLINE" ))
+            bOption(List.of( "simple_stmt", "_simple_stmts", "opt_semicolon", "NEWLINE" ))
     ))),
 
     _simple_stmts( bProd(List.of(
@@ -49,12 +48,9 @@ public enum ProdFCTY implements Stackable{
     ))),
 
     assignment( bProd(List.of(
-            bOption(List.of( "IDENTIFIER", "DEL_COLON", "expression", "DEL_ASSIGN", "expressions" )),
-            bOption(List.of( "IDENTIFIER", "DEL_COLON", "expression" )),
-            bOption(List.of( "DEL_OPEN_PARENTHESIS", "single_target", "DEL_CLOSE_PARENTHESIS", "DEL_COLON", "expression", "DEL_ASSIGN", "expressions" )),
-            bOption(List.of( "DEL_OPEN_PARENTHESIS", "single_target", "DEL_CLOSE_PARENTHESIS", "DEL_COLON", "expression" )),
-            bOption(List.of( "single_subscript_attribute_target", "DEL_COLON", "expression", "DEL_ASSIGN", "expressions" )),
-            bOption(List.of( "single_subscript_attribute_target", "DEL_COLON", "expression" )),
+            bOption(List.of( "IDENTIFIER", "DEL_COLON", "expression", "opt_assign_expressions" )),
+            bOption(List.of( "DEL_OPEN_PARENTHESIS", "single_target", "DEL_CLOSE_PARENTHESIS", "DEL_COLON", "expression", "opt_assign_expressions" )),
+            bOption(List.of( "single_subscript_attribute_target", "DEL_COLON", "expression", "opt_assign_expressions" )),
             bOption(List.of( "targets", "DEL_ASSIGN", "_assignment", "expressions" )),
             bOption(List.of( "single_target", "augassign", "expressions" ))
     ))),
@@ -81,8 +77,7 @@ public enum ProdFCTY implements Stackable{
     ))),
 
     return_stmt( bProd(List.of(
-            bOption(List.of( "KW_RETURN", "expressions")),
-            bOption(List.of( "KW_RETURN" ))
+            bOption(List.of( "KW_RETURN", "opt_expressions"))
     ))),
 
     block( bProd(List.of(
@@ -91,8 +86,7 @@ public enum ProdFCTY implements Stackable{
     ))),
 
     function_def( bProd(List.of(
-            bOption(List.of( "KW_DEF", "IDENTIFIER", "DEL_OPEN_PARENTHESIS", "parameters", "DEL_CLOSE_PARENTHESIS", "DEL_COLON", "block" )),
-            bOption(List.of( "KW_DEF", "IDENTIFIER", "DEL_OPEN_PARENTHESIS", "DEL_CLOSE_PARENTHESIS", "DEL_COLON", "block" ))
+            bOption(List.of( "KW_DEF", "IDENTIFIER", "DEL_OPEN_PARENTHESIS", "opt_parameters", "DEL_CLOSE_PARENTHESIS", "DEL_COLON", "block" ))
     ))),
 
     parameters( bProd(List.of(
@@ -129,15 +123,11 @@ public enum ProdFCTY implements Stackable{
     ))),
 
     if_stmt( bProd(List.of(
-            bOption(List.of( "KW_IF", "expression", "DEL_COLON", "block", "elif_stmt" )),
-            bOption(List.of( "KW_IF", "expression", "DEL_COLON", "block", "else_block" )),
-            bOption(List.of( "KW_IF", "expression", "DEL_COLON", "block" ))
+            bOption(List.of( "KW_IF", "expression", "DEL_COLON", "block", "opt_elif_or_else_block" ))
     ))),
 
     elif_stmt( bProd(List.of(
-            bOption(List.of( "KW_ELIF", "expression", "DEL_COLON", "block", "elif_stmt" )),
-            bOption(List.of( "KW_ELIF", "expression", "DEL_COLON", "block", "else_block" )),
-            bOption(List.of( "KW_ELIF", "expression", "DEL_COLON", "block" ))
+            bOption(List.of( "KW_ELIF", "expression", "DEL_COLON", "block", "opt_elif_or_else_block" ))
     ))),
 
     else_block( bProd(List.of(
@@ -145,18 +135,15 @@ public enum ProdFCTY implements Stackable{
     ))),
 
     while_stmt( bProd(List.of(
-            bOption(List.of( "KW_WHILE", "expression", "DEL_COLON", "block", "else_block" )),
-            bOption(List.of( "KW_WHILE", "expression", "DEL_COLON", "block" ))
+            bOption(List.of( "KW_WHILE", "expression", "DEL_COLON", "block", "opt_else_block" ))
     ))),
 
     for_stmt( bProd(List.of(
-            bOption(List.of( "KW_FOR", "targets", "KW_IN", "expressions", "DEL_COLON", "block", "else_block" )),
-            bOption(List.of( "KW_FOR", "targets", "KW_IN", "expressions", "DEL_COLON", "block" ))
+            bOption(List.of( "KW_FOR", "targets", "KW_IN", "expressions", "DEL_COLON", "block", "opt_else_block" ))
     ))),
 
     expressions( bProd(List.of(
-            bOption(List.of( "expression", "_expressions", "DEL_COMMA" )),
-            bOption(List.of( "expression", "_expressions" ))
+            bOption(List.of( "expression", "_expressions", "opt_comma" ))
     ))),
 
     _expressions( bProd(List.of(
@@ -165,7 +152,7 @@ public enum ProdFCTY implements Stackable{
     ))),
 
     expression( bProd(List.of(
-            bOption(List.of( "disjunction", "KW_IF", "disjunction", "KW_ELSE", "expression" )),
+            bOption(List.of( "disjunction", "opt_ternary_operator" )),
             bOption(List.of( "disjunction" ))
     ))),
 
@@ -193,7 +180,7 @@ public enum ProdFCTY implements Stackable{
     ))),
 
     comparison( bProd(List.of(
-            bOption(List.of( "bitwise_or", "compare_op_bitwise_or_pair", "_comparison" )),
+            bOption(List.of( "bitwise_or", "_comparison" )),
             bOption(List.of( "bitwise_or" ))
     ))),
 
@@ -323,7 +310,7 @@ public enum ProdFCTY implements Stackable{
     ))),
 
     power( bProd(List.of(
-                bOption(List.of( "primary", "OP_EXP", "factor")),
+                bOption(List.of( "primary", "opt_power")),
                 bOption(List.of( "primary" ))
     ))),
 
@@ -333,11 +320,9 @@ public enum ProdFCTY implements Stackable{
 
     _primary( bProd(List.of(
                 bOption(List.of( "DEL_DOT", "IDENTIFIER", "_primary" )),
-                bOption(List.of( "DEL_OPEN_PARENTHESIS", "arguments", "DEL_CLOSE_PARENTHESIS", "_primary" )),
-                bOption(List.of( "DEL_OPEN_PARENTHESIS", "DEL_CLOSE_PARENTHESIS", "_primary" )),
+                bOption(List.of( "DEL_OPEN_PARENTHESIS", "opt_arguments", "DEL_CLOSE_PARENTHESIS", "_primary" )),
                 bOption(List.of( "s_epsilon" ))
     ))),
-
 
     atom( bProd(List.of(
                 bOption(List.of( "IDENTIFIER" )),
@@ -370,14 +355,11 @@ public enum ProdFCTY implements Stackable{
     ))),
 
     list( bProd(List.of(
-                bOption(List.of( "DEL_OPEN_BRACKET", "expressions", "DEL_CLOSE_BRACKET" )),
-                bOption(List.of( "DEL_OPEN_BRACKET", "DEL_CLOSE_BRACKET" ))
+                bOption(List.of( "DEL_OPEN_BRACKET", "opt_expressions", "DEL_CLOSE_BRACKET" ))
     ))),
 
     tuple( bProd(List.of(
-                bOption(List.of( "DEL_OPEN_PARENTHESIS", "expressions", "DEL_COMMA", "expressions", "DEL_CLOSE_PARENTHESIS" )),
-                bOption(List.of( "DEL_OPEN_PARENTHESIS", "expressions", "DEL_COMMA", "DEL_CLOSE_PARENTHESIS" )),
-                bOption(List.of( "DEL_OPEN_PARENTHESIS", "DEL_CLOSE_PARENTHESIS" ))
+                bOption(List.of( "DEL_OPEN_PARENTHESIS", "opt_tuple_content", "DEL_CLOSE_PARENTHESIS" ))
         ))),
 
     set( bProd(List.of(
@@ -385,13 +367,11 @@ public enum ProdFCTY implements Stackable{
         ))),
 
     dict( bProd(List.of(
-                bOption(List.of( "DEL_OPEN_BRACE", "kvpairs", "DEL_CLOSE_BRACE" )),
-                bOption(List.of( "DEL_OPEN_BRACE", "DEL_CLOSE_BRACE" ))
+                bOption(List.of( "DEL_OPEN_BRACE", "opt_kvpairs", "DEL_CLOSE_BRACE" ))
         ))),
 
     kvpairs( bProd(List.of(
-                bOption(List.of( "kvpair", "_kvpairs", "DEL_COMMA" )),
-                bOption(List.of( "kvpair", "_kvpairs" ))
+                bOption(List.of( "kvpair", "_kvpairs", "opt_comma" ))
         ))),
     _kvpairs( bProd(List.of(
                 bOption(List.of( "DEL_COMMA", "kvpair", "_kvpairs" )),
@@ -408,8 +388,7 @@ public enum ProdFCTY implements Stackable{
     ))),
 
     args( bProd(List.of(
-                bOption(List.of( "expression", "_args", "DEL_COMMA", "kwargs" )),
-                bOption(List.of( "expression", "_args" )),
+                bOption(List.of( "expression", "_args", "opt_comma_kwargs" )),
                 bOption(List.of( "kwargs" ))
         ))),
 
@@ -432,8 +411,7 @@ public enum ProdFCTY implements Stackable{
         ))),
 
     targets( bProd(List.of(
-                bOption(List.of( "target_with_targ_atom", "_targets", "DEL_COMMA" )),
-                bOption(List.of( "target_with_targ_atom", "_targets" ))
+                bOption(List.of( "target_with_targ_atom", "_targets", "opt_comma" ))
         ))),
 
     _targets( bProd(List.of(
@@ -442,13 +420,10 @@ public enum ProdFCTY implements Stackable{
         ))),
 
     targets_list_seq(  bProd(List.of(
-                bOption(List.of( "target_with_targ_atom", "_targets_seq", "DEL_COMMA" )),
-                bOption(List.of( "target_with_targ_atom", "_targets_seq" ))
+                bOption(List.of( "target_with_targ_atom", "_targets_seq", "opt_comma" ))
         ))),
     targets_tuple_seq(bProd(List.of(
-                bOption(List.of( "target_with_targ_atom", "_targets_seq", "DEL_COMMA" )),
-                bOption(List.of( "target_with_targ_atom", "_targets_seq" )),
-                bOption(List.of( "target_with_targ_atom", "DEL_COMMA" ))
+                bOption(List.of( "target_with_targ_atom", "opt_targets_seq_or_comma" ))
         ))),
 
     _targets_seq( bProd(List.of(
@@ -463,11 +438,8 @@ public enum ProdFCTY implements Stackable{
 
     targ_atom( bProd( List.of(
                 bOption(List.of( "IDENTIFIER" )),
-                bOption(List.of( "DEL_OPEN_PARENTHESIS", "target_with_targ_atom", "DEL_CLOSE_PARENTHESIS" ) ),
-                bOption(List.of( "DEL_OPEN_PARENTHESIS", "targets_tuple_seq", "DEL_CLOSE_PARENTHESIS" ) ),
-                bOption(List.of( "DEL_OPEN_PARENTHESIS", "DEL_CLOSE_PARENTHESIS" )),
-                bOption(List.of( "DEL_OPEN_BRACKET", "targets_list_seq", "DEL_CLOSE_BRACKET" ) ),
-                bOption(List.of( "DEL_OPEN_BRACKET", "DEL_CLOSE_BRACKET" ) )
+                bOption(List.of( "DEL_OPEN_PARENTHESIS", "opt_twta_or_tts", "DEL_CLOSE_PARENTHESIS" )),
+                bOption(List.of( "DEL_OPEN_BRACKET", "opt_targets_list_seq", "DEL_CLOSE_BRACKET" ))
         ))),
 
     single_target( bProd(List.of(
@@ -486,10 +458,92 @@ public enum ProdFCTY implements Stackable{
 
     _t_primary( bProd(List.of(
                 bOption(List.of( "DEL_DOT", "IDENTIFIER", "_t_primary", "s_next_is_t_lookahead" )),
-                bOption(List.of( "DEL_OPEN_PARENTHESIS", "arguments", "DEL_CLOSE_PARENTHESIS", "_t_primary", "s_next_is_t_lookahead" )),
-                bOption(List.of( "DEL_OPEN_PARENTHESIS", "DEL_CLOSE_PARENTHESIS", "_t_primary", "s_next_is_t_lookahead" )),
+                bOption(List.of( "DEL_OPEN_PARENTHESIS", "opt_arguments", "DEL_CLOSE_PARENTHESIS", "_t_primary", "s_next_is_t_lookahead" )),
                 bOption(List.of( "s_epsilon" ))
-        )))
+        ))),
+
+    opt_semicolon( bProd(List.of(
+            bOption(List.of( "DEL_SEMICOLON" ) ),
+            bOption(List.of( "s_epsilon" ) )
+            ))),
+
+    opt_comma( bProd(List.of(
+            bOption(List.of( "DEL_COMMA" ) ),
+            bOption(List.of( "s_epsilon" ) )
+            ))),
+
+    opt_assign_expressions( bProd(List.of(
+            bOption(List.of( "DEL_ASSIGN", "expressions" ) ),
+            bOption(List.of( "s_epsilon" ) )
+            ))),
+
+    opt_expressions( bProd(List.of(
+            bOption(List.of( "expressions" ) ),
+            bOption(List.of( "s_epsilon" ) )
+            ))),
+
+    opt_parameters( bProd(List.of(
+            bOption(List.of( "parameters" ) ),
+            bOption(List.of( "s_epsilon" ) )
+            ))),
+
+    opt_else_block( bProd(List.of(
+            bOption(List.of( "else_block" )),
+            bOption(List.of( "s_epsilon" ))
+            ))),
+
+    opt_elif_or_else_block( bProd(List.of(
+            bOption(List.of( "elif_stmt" )),
+            bOption(List.of( "else_block" )),
+            bOption(List.of( "s_epsilon" ))
+            ))),
+
+    opt_ternary_operator( bProd(List.of(
+            bOption(List.of( "KW_IF", "disjunction", "KW_ELSE", "expression" )),
+            bOption(List.of( "s_epsilon" ))
+            ))),
+
+    opt_power( bProd(List.of(
+            bOption(List.of( "OP_EXP", "factor" )),
+            bOption(List.of( "s_epsilon" ))
+            ))),
+
+    opt_arguments( bProd(List.of(
+            bOption(List.of( "arguments" )),
+            bOption(List.of( "s_epsilon" ))
+    ))),
+
+    opt_tuple_content( bProd(List.of(
+            bOption(List.of( "expressions", "DEL_COMMA", "opt_expressions" )),
+            bOption(List.of( "s_epsilon" ))
+    ))),
+
+    opt_kvpairs( bProd(List.of(
+            bOption(List.of( "kvpairs" )),
+            bOption(List.of( "s_epsilon" ))
+    ))),
+
+    opt_comma_kwargs( bProd(List.of(
+            bOption(List.of( "DEL_COMMA", "kwargs" )),
+            bOption(List.of( "s_epsilon" ))
+    ))),
+
+    opt_targets_seq_or_comma( bProd(List.of(
+            bOption(List.of( "_targets_seq", "opt_comma" )),
+            bOption(List.of( "DEL_COMMA" )),
+            bOption(List.of( "s_epsilon" ))
+    ))),
+
+    opt_twta_or_tts( bProd(List.of(
+            bOption(List.of( "target_with_targ_atom" )),
+            bOption(List.of( "targets_tuple_seq" )),
+            bOption(List.of( "s_epsilon" ))
+    ))),
+
+    opt_targets_list_seq( bProd(List.of(
+            bOption(List.of( "targets_list_seq" )),
+            bOption(List.of( "s_epsilon" ))
+    ))),
     ;
 
     private static Option bOption(List<String> elements){

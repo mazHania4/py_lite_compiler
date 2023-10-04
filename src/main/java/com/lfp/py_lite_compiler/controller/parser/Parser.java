@@ -128,6 +128,10 @@ public class Parser {
         return (tokens.size() > currentPosition) ? tokens.get(currentPosition).getTokenType() : TokenTypesFCTY.END_OF_FILE.get();
     }
 
+    private void saveErrorPosition(int positionBeforeError){
+        if (positionBeforeError > currentPosition) this.positionBeforeError = positionBeforeError;
+    }
+
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
         currentPosition = 0;
