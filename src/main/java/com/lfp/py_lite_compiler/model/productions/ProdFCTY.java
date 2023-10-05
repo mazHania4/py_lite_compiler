@@ -6,7 +6,7 @@ import com.lfp.py_lite_compiler.model.StackableType;
 import java.util.List;
 
 
-public enum ProdFCTY implements Stackable{
+public enum ProdFCTY{
 
     statements( bProd(List.of(
             bOption(List.of( "statement", "_statements" ))
@@ -543,7 +543,7 @@ public enum ProdFCTY implements Stackable{
     opt_targets_list_seq( bProd(List.of(
             bOption(List.of( "targets_list_seq" )),
             bOption(List.of( "s_epsilon" ))
-    ))),
+    )))
     ;
 
     private static Option bOption(List<String> elements){
@@ -563,8 +563,4 @@ public enum ProdFCTY implements Stackable{
         this.production = production;
     }
 
-    @Override
-    public StackableType getType() {
-        return StackableType.PRODUCTION;
-    }
 }

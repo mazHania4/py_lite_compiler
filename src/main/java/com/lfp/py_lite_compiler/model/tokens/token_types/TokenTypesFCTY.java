@@ -3,7 +3,7 @@ package com.lfp.py_lite_compiler.model.tokens.token_types;
 import com.lfp.py_lite_compiler.model.Stackable;
 import com.lfp.py_lite_compiler.model.StackableType;
 
-public enum TokenTypesFCTY implements Stackable {
+public enum TokenTypesFCTY{
 
     LIT_STRING(new TokenType("LIT_STRING", "'[[0-39)U(39-255]]*' | \"[[0-34)U(34-255]]*\"")),
     LIT_INTEGER(new TokenType("LIT_INTEGER", "(0-9)+")),
@@ -114,9 +114,4 @@ public enum TokenTypesFCTY implements Stackable {
         return tokenType;
     }
 
-
-    @Override
-    public StackableType getType() {
-        return StackableType.TOKEN;
-    }
 }

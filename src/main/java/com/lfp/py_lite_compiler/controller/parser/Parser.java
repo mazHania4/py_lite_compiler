@@ -17,25 +17,23 @@ public class Parser {
 
     private final List<Token> tokens;
     private int currentPosition;
-    private int positionBeforeError;
+    private int lastReadPosition;
 
     public String analyze(){
-        var prod = tryMatchProduction(ProdFCTY.statements.get());
-        if (prod == null) {
-            return "Error in position: " + positionBeforeError;
+        var prod = tryMatchProduction(ProdFCTY.statements);
+        if ((prod != null) && (currentPosition == tokens.size()-1)) {
+            return "Analysis completed, no errors \n Found:" + prod.getMatchedOption();
         }
-        return "Analysis completed, no errors \n Found:" + prod.getMatchedOption();
+        return "Error in position: " + lastReadPosition;
     }
 
-    private Production tryMatchProduction(Production prod){
+    private Production tryMatchProduction(ProdFCTY prod){
         boolean optionSucceeded = false;
         boolean elementWasMatched;
-        Option matchedOption = Option.builder().elements(new ArrayList<>()).build();
+        Option matchedOption = Option.builder().foundElements(new ArrayList<>()).build();
         int positionSave = currentPosition;
-        int counter = 0;
-        for(Option option : prod.getOptions()) {
+        for(Option option : prod.get().getOptions()) {
             var stack = initializeStack(option);
-            System.out.println("\n" + counter + ". try option: " + option);
             do{
                 elementWasMatched = false;
                 System.out.print("\n---element evaluated:" + stack.peek() + " current position: " + currentPosition );
@@ -43,21 +41,22 @@ public class Parser {
                     case TOKEN -> {
                         var tokenType = getToken(stack.peek());
                         if(readEntry() == tokenType){
-                            matchedOption.getElements().add(stack.pop());
+                            matchedOption.getFoundElements().add( tokenType );
+                            stack.pop();
                             elementWasMatched = true;
                             currentPosition++;
                         }
                     } case PRODUCTION -> {
                         var returnedProd = tryMatchProduction(getProduction(stack.pop()));
                         if (returnedProd != null){
-                            matchedOption.getElements().add("   " + returnedProd.getMatchedOption());
+                            matchedOption.getFoundElements().add(returnedProd);
                             elementWasMatched = true;
                         }
                     } case SPECIAL_SYMBOL -> {
                         var s_symbol = getSpecialSymbol(stack.pop());
                         switch (s_symbol){
                             case s_epsilon -> {
-                                matchedOption.getElements().add(s_symbol.name());
+                                matchedOption.getFoundElements().add(s_symbol);
                                 elementWasMatched = true;
                             }
                             case s_next_is_t_lookahead, s_next_is_close_parenthesis -> elementWasMatched = nextProductionIs(s_symbol.getProduction());
@@ -72,11 +71,16 @@ public class Parser {
                 optionSucceeded = true;
                 break;
             } else {
-                positionBeforeError = currentPosition; // review
+                saveLastReadPosition();
                 currentPosition = positionSave;
             }
         }
-        return optionSucceeded ? Production.builder().matchedOption(matchedOption).build() : null;
+        return optionSucceeded ? Production.builder().name(prod.name()).matchedOption(matchedOption).startLine(getLine(positionSave+1)).endLine(getLine(currentPosition)).build() : null;
+    }
+
+    private int getLine(int position){
+        if (position >= tokens.size()) position = tokens.size()-1;
+        return tokens.get(position).getLine();
     }
 
     private boolean nextProductionIs(Production prod){
@@ -102,8 +106,8 @@ public class Parser {
         return stack;
     }
 
-    private Production getProduction(String stackedValue){
-        return ProdFCTY.valueOf(stackedValue).get();
+    private ProdFCTY getProduction(String stackedValue){
+        return ProdFCTY.valueOf(stackedValue);
     }
 
     private TokenType getToken(String stackedValue){
@@ -128,8 +132,8 @@ public class Parser {
         return (tokens.size() > currentPosition) ? tokens.get(currentPosition).getTokenType() : TokenTypesFCTY.END_OF_FILE.get();
     }
 
-    private void saveErrorPosition(int positionBeforeError){
-        if (positionBeforeError > currentPosition) this.positionBeforeError = positionBeforeError;
+    private void saveLastReadPosition(){
+        lastReadPosition = Math.max(currentPosition, lastReadPosition);
     }
 
     public Parser(List<Token> tokens) {
