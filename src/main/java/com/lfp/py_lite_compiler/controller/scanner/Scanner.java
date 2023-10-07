@@ -41,6 +41,7 @@ public class Scanner {
             for (Token dedent : dedentTokens.get()) {
                 dedent.setLine(currentLine);
                 dedent.setColumn(dedent.getColumn() + currentColumn);
+                dedent.setIndex(tokens.size());
                 tokens.add(dedent);
             }
         }
@@ -70,7 +71,7 @@ public class Scanner {
             addIndentation();
             return;
         }
-        Token token = new Token(getTokenType(), startPosition, currentLine, currentColumn, lexeme.toString());
+        Token token = new Token(getTokenType(), startPosition, currentLine, currentColumn, tokens.size(), lexeme.toString());
         tokens.add(token);
     }
 
@@ -78,8 +79,8 @@ public class Scanner {
     private void addIndentation() {
         if (isNotLastCharacter()) {
             String spaces = lexeme.substring(1);
-            if ((tokens.size() > 0) && (tokens.get(tokens.size() - 1).getTokenType() != TokenTypesFCTY.NEWLINE.get())) {
-                Token token = new Token(getTokenType(), startPosition, currentLine, currentColumn, lexeme.substring(0, 1));
+            if ((!tokens.isEmpty()) && (tokens.get(tokens.size() - 1).getTokenType() != TokenTypesFCTY.NEWLINE.get())) {
+                Token token = new Token(getTokenType(), startPosition, currentLine, currentColumn, tokens.size(), lexeme.substring(0, 1));
                 tokens.add(token);
             }
             if (!nextIsEndOfPhysicalLineOrComment()) {
@@ -92,6 +93,7 @@ public class Scanner {
                     for (Token indToken : indTokens.get()) {
                         indToken.setLine(currentLine);
                         indToken.setColumn(indToken.getColumn() + currentColumn);
+                        indToken.setIndex(tokens.size());
                         tokens.add(indToken);
                     }
                 }
@@ -100,7 +102,7 @@ public class Scanner {
     }
 
     private void addError(ErrorType errorType) {
-        errors.add(new Error(errorType, currentLine, currentColumn));
+        errors.add(Error.builder().errorType(errorType).startLine(currentLine).startColumn(currentColumn).build());
     }
 
     public List<Error> getErrors() {

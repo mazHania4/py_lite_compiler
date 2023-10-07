@@ -9,6 +9,7 @@ public class Token{
     private int startPosition;
     private int line;
     private int column;
+    private int index;
     private String lexeme;
 
 }

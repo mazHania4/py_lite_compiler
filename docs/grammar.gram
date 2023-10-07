@@ -352,7 +352,7 @@ opt_arguments:
     | ε
 
 opt_tuple_content:
-    | expressions ',' opt_expressions 
+    | expression ',' opt_expressions 
     | ε
 
 opt_kvpairs:

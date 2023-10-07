@@ -514,7 +514,7 @@ public enum ProdFCTY{
     ))),
 
     opt_tuple_content( bProd(List.of(
-            bOption(List.of( "expressions", "DEL_COMMA", "opt_expressions" )),
+            bOption(List.of( "expression", "DEL_COMMA", "opt_expressions" )),
             bOption(List.of( "s_epsilon" ))
     ))),
 

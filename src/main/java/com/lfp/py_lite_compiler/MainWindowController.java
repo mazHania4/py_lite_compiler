@@ -31,14 +31,15 @@ public class MainWindowController implements Initializable {
     @FXML
     private CodeArea codeArea;
     @FXML
-    private TextArea errorOutput;
+    private TextArea output;
     private Token selectedToken;
     private ObservableList<Token> tokenList = FXCollections.observableArrayList();
     @FXML
     private TableView<Token> tokenTable;
     @FXML
     private TableColumn<Token, String> nameColumn, patternColumn, colColumn, lineColumn, lexemeColumn;
-
+    @FXML
+    private TableColumn<Token, Integer> indexColumn;
     private ColoringController colorCtrl;
 
     @Override
@@ -54,28 +55,46 @@ public class MainWindowController implements Initializable {
         lexemeColumn.setCellValueFactory(new PropertyValueFactory<>("lexeme"));
         lineColumn.setCellValueFactory(new PropertyValueFactory<>("line"));
         colColumn.setCellValueFactory(new PropertyValueFactory<>("column"));
+        indexColumn.setCellValueFactory(new PropertyValueFactory<>("index"));
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         codeArea.appendText(sampleCode);
     }
 
     @FXML
     protected void onRunButtonClick() {
+        //scanner:
         Scanner scanner = new Scanner(("\n" + codeArea.getText() + "\n").toCharArray());
         List<Token> tokens = scanner.analyze();
         codeArea.setStyleSpans(0, colorCtrl.getStyleSpans(tokens, codeArea.getText()));
         tokenList = FXCollections.observableArrayList(tokens);
         tokenTable.setItems(tokenList);
-        var errors = scanner.getErrors();
-        var output = new Parser(tokenList).analyze();
-        errorOutput.setText(getErrorMessages(errors) + "\n" + output);
+        String lexicalErrors = getErrorMessages(scanner.getErrors());
+        //parser:
+        var parser = new Parser(tokens);
+        String syntaxError = "";
+        if (parser.analyze()){
+            //manejar reportes
+        } else {
+            syntaxError = parser.getError().getMessage();
+        }
+        printOutput(lexicalErrors, syntaxError);
+    }
+
+    private void printOutput(String lexicalErrors, String syntaxError){
+        output.setText(
+                "Resultados análisis léxico: "
+                + (lexicalErrors.isEmpty() ? "\n > Completado sin errores" : "\n" + lexicalErrors)
+                + "\n\nResultados análisis sintáctico: "
+                + (syntaxError.isEmpty() ? "\n > Completado sin errores" : "\n" + syntaxError)
+        );
     }
 
     @FXML
     protected void onFileButtonClick() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("text files", "*.txt"),
-                new FileChooser.ExtensionFilter("python files", "*.py"));
+                new FileChooser.ExtensionFilter("python files", "*.py"),
+                new FileChooser.ExtensionFilter("text files", "*.txt"));
         File file = fileChooser.showOpenDialog(new Stage());
         String fileContent = new FileManager().getFileContent(file);
         codeArea.replaceText(fileContent);

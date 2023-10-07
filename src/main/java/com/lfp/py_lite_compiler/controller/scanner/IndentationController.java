@@ -16,12 +16,12 @@ public class IndentationController {
             return Optional.empty();
         if (indentationStack.peek() < numSpaces) {
             indentationStack.push(numSpaces);
-            tokens.add(new Token(TokenTypesFCTY.INDENT.get(), 0, 0, 0, spaces));
+            tokens.add(new Token(TokenTypesFCTY.INDENT.get(), 0, 0, 0, 0, spaces));
         }
         if (indentationStack.contains(numSpaces)) {
             while (indentationStack.peek() > numSpaces) {
                 indentationStack.pop();
-                tokens.add(new Token(TokenTypesFCTY.DEDENT.get(), 0, 0, 0, spaces));
+                tokens.add(new Token(TokenTypesFCTY.DEDENT.get(), 0, 0, 0, 0, spaces));
             }
         }
         Token[] tokensArray = new Token[tokens.size()];
