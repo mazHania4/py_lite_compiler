@@ -14,10 +14,10 @@ public class Error {
 
     public String getMessage(){
         return ("> " + errorType.getName() + ": " + errorType.getDescription()
-            + (((token == null) || (productionName.isEmpty()) )
-                ? "\n   on line: " + startLine + ", column: " + startColumn
+            + (( (token == null) || (productionName == null) )
+                ? "   on line: " + startLine + ", column: " + startColumn
                 : ("\n   around token #" + token.getIndex() + " : {" + token.getTokenType().getName() + ": '" + token.getLexeme() + "'} "
-                    + "\n   on line: " + token.getLine() + ", column: " + token.getColumn())
+                    + "   on line: " + token.getLine() + ", column: " + token.getColumn())
                     + " while trying to produce: " + productionName )
         );
     }

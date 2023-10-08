@@ -13,7 +13,7 @@ public class MainWindow extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("main-window-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 700);
+        Scene scene = new Scene(fxmlLoader.load(), 1500, 850);
         String cssPath = new File("src/main/resources/styles/styles.css").toURI().toString();
         scene.getStylesheets().add(cssPath);
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());

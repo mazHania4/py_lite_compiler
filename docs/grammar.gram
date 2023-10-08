@@ -204,11 +204,14 @@ power:
     | primary opt_power
 
 primary:
-    | atom _primary
-_primary:
-    | '.' NAME _primary
-    | '(' opt_arguments ')' _primary
+    | def_reference
+    | atom def_or_attribute_reference
+def_or_attribute_reference:
+    | '.' def_reference
+    | '.' NAME def_or_attribute_reference
     | ε
+def_reference:
+    | NAME '(' opt_arguments ')' def_or_attribute_reference
 
 atom:
     | NAME
@@ -302,11 +305,15 @@ single_subscript_attribute_target:
     | t_primary '.' NAME !t_lookahead 
 
 t_primary:
-    | atom _t_primary &t_lookahead
-_t_primary:
-    | '.' NAME _t_primary &t_lookahead
-    | '(' opt_arguments ')' _t_primary &t_lookahead
+    | t_def_reference
+    | atom t_def_or_attribute_reference &t_lookahead
+t_def_or_attribute_reference:
+    | '.' t_def_reference  
+    | '.' NAME t_def_or_attribute_reference &t_lookahead
     | ε
+t_def_reference:
+    | NAME '(' opt_arguments ')' t_def_or_attribute_reference &t_lookahead
+
 
 t_lookahead: '(' | '[' | '.'
 

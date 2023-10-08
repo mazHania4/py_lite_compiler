@@ -18,10 +18,13 @@ import java.util.Stack;
 
 public class Parser {
 
-    private final List<Token> tokens;
     private int currentPosition;
     private int lastReadPosition;
     private String lastReadProdName;
+    private final List<Token> tokens;
+    @Getter private List<Production> functions;
+    @Getter private List<Production> functionCalls;
+    @Getter private List<Production> blocks;
     @Getter private Production foundProduction;
     @Getter private Error error;
 
@@ -30,6 +33,7 @@ public class Parser {
         boolean analysisResult = (prod != null) && (currentPosition == tokens.size());
         if (analysisResult) {
             this.foundProduction = prod;
+            this.blocks.add(prod);
         } else {
             this.error = Error.builder()
                     .token(tokens.get(lastReadPosition))
@@ -44,6 +48,9 @@ public class Parser {
         boolean elementWasMatched;
         Option matchedOption = Option.builder().foundElements(new ArrayList<>()).build();
         int positionSave = currentPosition;
+        List<Production> functionsSave = new ArrayList<>(functions);
+        List<Production> functionCallsSave = new ArrayList<>(functionCalls);
+        List<Production> blocksSave = new ArrayList<>(blocks);
         for(Option option : prod.get().getOptions()) {
             var stack = initializeStack(option);
             do{
@@ -52,8 +59,9 @@ public class Parser {
                 switch ((getType(stack.peek()))){
                     case TOKEN -> {
                         var tokenType = getToken(stack.peek());
-                        if(readEntry() == tokenType){
-                            matchedOption.getFoundElements().add( tokenType );
+                        var nextToken = readEntry();
+                        if( nextToken.getTokenType() == tokenType){
+                            matchedOption.getFoundElements().add( nextToken );
                             stack.pop();
                             elementWasMatched = true;
                             currentPosition++;
@@ -86,9 +94,19 @@ public class Parser {
             } else {
                 saveLastReadPosition();
                 currentPosition = positionSave;
+                functions = functionsSave;
+                functionCalls = functionCallsSave;
+                blocks = blocksSave;
             }
         }
-        return optionSucceeded ? Production.builder().name(prod.name()).matchedOption(matchedOption).startLine(getLine(positionSave)).endLine(getLine(currentPosition)).build() : null;
+        Production production = null;
+        if (optionSucceeded) {
+            production = Production.builder().name(prod.name()).matchedOption(matchedOption).startLine(getLine(positionSave)).endLine(getLine(currentPosition)).build();
+            if (prod.equals(ProdFCTY.block)) this.blocks.add(production);
+            if (prod.equals(ProdFCTY.function_def)) this.functions.add(production);
+            if ( prod.equals(ProdFCTY.def_reference) || prod.equals(ProdFCTY.t_def_reference)) this.functionCalls.add(production);
+        }
+        return production;
     }
 
     private int getLine(int position){
@@ -101,7 +119,7 @@ public class Parser {
         for(Option option : prod.getOptions()) {
             var stack = initializeStack(option);
             do{
-                elementWasMatched = (readEntry() == getToken(stack.pop()));
+                elementWasMatched = (readEntry().getTokenType() == getToken(stack.pop()));
             } while (!stack.isEmpty() && elementWasMatched);
             if(stack.isEmpty() && elementWasMatched) { //the option was completely matched so the production succeeded
                 return true;
@@ -141,8 +159,10 @@ public class Parser {
         }
     }
 
-    private TokenType readEntry() {
-        return (tokens.size() > currentPosition) ? tokens.get(currentPosition).getTokenType() : TokenTypesFCTY.END_OF_FILE.get();
+    private Token readEntry() {
+        return (tokens.size() > currentPosition)
+                ? tokens.get(currentPosition)
+                : new Token(TokenTypesFCTY.END_OF_FILE.get(), 0,0,0,0,"");
     }
 
     private void saveLastReadPosition(){
@@ -152,5 +172,8 @@ public class Parser {
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
         currentPosition = 0;
+        functions = new ArrayList<>();
+        functionCalls = new ArrayList<>();
+        blocks = new ArrayList<>();
     }
 }

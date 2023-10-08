@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.*;
 @Getter @Setter @AllArgsConstructor @ToString
-public class TokenType  implements Stackable {
+public class TokenType {
     private String name;
     private String pattern;
     public StringProperty nameProperty() {
@@ -15,8 +15,4 @@ public class TokenType  implements Stackable {
         return new SimpleStringProperty(pattern);
     }
 
-    @Override
-    public StackableType getType() {
-        return StackableType.TOKEN;
-    }
 }

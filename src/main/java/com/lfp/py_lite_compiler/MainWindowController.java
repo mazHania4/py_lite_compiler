@@ -1,8 +1,10 @@
 package com.lfp.py_lite_compiler;
 
+import com.lfp.py_lite_compiler.controller.parser.FunctionController;
 import com.lfp.py_lite_compiler.controller.parser.Parser;
 import com.lfp.py_lite_compiler.controller.scanner.Scanner;
 import com.lfp.py_lite_compiler.model.errors.Error;
+import com.lfp.py_lite_compiler.model.productions.Production;
 import com.lfp.py_lite_compiler.model.tokens.Token;
 import com.lfp.py_lite_compiler.utils.FileManager;
 import com.lfp.py_lite_compiler.view.coloring.ColoringController;
@@ -32,32 +34,41 @@ public class MainWindowController implements Initializable {
     private CodeArea codeArea;
     @FXML
     private TextArea output;
-    private Token selectedToken;
+    private ColoringController colorCtrl;
+    private FunctionController functionCtrl;
+
+    // Token table elements:
     private ObservableList<Token> tokenList = FXCollections.observableArrayList();
+    private Token selectedToken;
     @FXML
     private TableView<Token> tokenTable;
     @FXML
-    private TableColumn<Token, String> nameColumn, patternColumn, colColumn, lineColumn, lexemeColumn;
+    private TableColumn<Token, String> nameColumn, patternColumn, colColumn, lineColumn, lexemeColumn, indexColumn;
+
+    // Function table elements:
+    private ObservableList<Production> functionList = FXCollections.observableArrayList();
+    private Production selectedFunction;
     @FXML
-    private TableColumn<Token, Integer> indexColumn;
-    private ColoringController colorCtrl;
+    private TableView<Production> functionTable;
+    @FXML
+    private TableColumn<Production, String> defIndex, defIdentifier, defStartLine, defEndLine, defReferences;
+
+    // Token table elements:
+    private ObservableList<Production> blockList = FXCollections.observableArrayList();
+    private Production selectedBlock;
+    @FXML
+    private TableView<Production> blockTable;
+    @FXML
+    private TableColumn<Production, String> blockIndex, blockStartLine, blockEndLine;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         colorCtrl = new ColoringController();
-        tokenTable.setItems(tokenList);
-        SelectionModel<Token> selectionModel = tokenTable.getSelectionModel();
-        selectionModel.selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            selectedToken = newSelection;
-        });
-        nameColumn.setCellValueFactory(data -> data.getValue().getTokenType().nameProperty());
-        patternColumn.setCellValueFactory(data -> data.getValue().getTokenType().patternProperty());
-        lexemeColumn.setCellValueFactory(new PropertyValueFactory<>("lexeme"));
-        lineColumn.setCellValueFactory(new PropertyValueFactory<>("line"));
-        colColumn.setCellValueFactory(new PropertyValueFactory<>("column"));
-        indexColumn.setCellValueFactory(new PropertyValueFactory<>("index"));
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         codeArea.appendText(sampleCode);
+        initializeTokenTable();
+        initializeFunctionTable();
+        initializeBlockTable();
     }
 
     @FXML
@@ -73,11 +84,19 @@ public class MainWindowController implements Initializable {
         var parser = new Parser(tokens);
         String syntaxError = "";
         if (parser.analyze()){
-            //manejar reportes
+            showFunctionTable(parser, tokens);
         } else {
             syntaxError = parser.getError().getMessage();
         }
         printOutput(lexicalErrors, syntaxError);
+    }
+
+    private void showFunctionTable(Parser parser, List<Token> tokens){
+        var functions = parser.getFunctions();
+        var functionCalls = parser.getFunctionCalls();
+        functionCtrl = FunctionController.builder().functions(functions).functionCalls(functionCalls).tokens(tokens).build();
+        functionList = FXCollections.observableArrayList( functionCtrl.getFunctions() );
+        functionTable.setItems(functionList);
     }
 
     private void printOutput(String lexicalErrors, String syntaxError){
@@ -114,6 +133,21 @@ public class MainWindowController implements Initializable {
         popupStage.show();
     }
 
+    @FXML
+    public void onParamsButtonClick() {
+        System.out.println("Show params");
+    }
+
+    @FXML
+    public void onSymbolTableButtonClick() {
+        System.out.println("Show symbol table");
+    }
+
+    @FXML
+    public void onStatementsButtonClick() {
+        System.out.println("Show Instructions");
+    }
+
     private String getErrorMessages(List<Error> errors) {
         StringBuilder buffer = new StringBuilder();
         for (Error error : errors) {
@@ -123,6 +157,44 @@ public class MainWindowController implements Initializable {
         return buffer.toString();
     }
 
+    private void initializeFunctionTable(){
+        functionTable.setItems(functionList);
+        SelectionModel<Production> selectionModel = functionTable.getSelectionModel();
+        selectionModel.selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            selectedFunction = newSelection;
+        });
+        defIndex.setCellValueFactory(new PropertyValueFactory<>("index"));
+        defIdentifier.setCellValueFactory(new PropertyValueFactory<>("identifier"));
+        defStartLine.setCellValueFactory(new PropertyValueFactory<>("startLine"));
+        defEndLine.setCellValueFactory(new PropertyValueFactory<>("endLine"));
+        defReferences.setCellValueFactory(new PropertyValueFactory<>("referencesCounter"));
+    }
+
+    private void initializeBlockTable(){
+        blockTable.setItems(blockList);
+        SelectionModel<Production> selectionModel = blockTable.getSelectionModel();
+        selectionModel.selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            selectedBlock = newSelection;
+        });
+        blockIndex.setCellValueFactory(new PropertyValueFactory<>("index"));
+        blockStartLine.setCellValueFactory(new PropertyValueFactory<>("startLine"));
+        blockEndLine.setCellValueFactory(new PropertyValueFactory<>("endLine"));
+    }
+
+    private void initializeTokenTable(){
+        tokenTable.setItems(tokenList);
+        SelectionModel<Token> selectionModel = tokenTable.getSelectionModel();
+        selectionModel.selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            selectedToken = newSelection;
+        });
+        nameColumn.setCellValueFactory(data -> data.getValue().getTokenType().nameProperty());
+        patternColumn.setCellValueFactory(data -> data.getValue().getTokenType().patternProperty());
+        lexemeColumn.setCellValueFactory(new PropertyValueFactory<>("lexeme"));
+        lineColumn.setCellValueFactory(new PropertyValueFactory<>("line"));
+        colColumn.setCellValueFactory(new PropertyValueFactory<>("column"));
+        indexColumn.setCellValueFactory(new PropertyValueFactory<>("index"));
+    }
+
     @FXML
     protected void onHelpButtonClick() {
         System.out.println("presiono ayuda");
@@ -130,53 +202,12 @@ public class MainWindowController implements Initializable {
 
     private String sampleCode =
             """
-                    # Esto es un comentario
-
-                    # Palabras reservadas y operadores
-                    def main():
-                        a = 10
-                        b = 20.5
-                        suma = a + b
-                        resta = a - b
-                        multiplicacion = a * b
-                        division = a / b
-
-                        if suma > 15:
-                            print("La suma es mayor que 15")
-                        else:
-                            print("La suma no es mayor que 15")
-
-                        for i in range(5):
-                            print(i)
-
-                        while a > 0:
-                            print(a)
-                            a -= 1
-                            
-                    # Python program to display the Fibonacci sequence
-                                        
-                    def recur_fibo(n):
-                       if n <= 1:
-                           return n
-                       else:
-                           return(recur_fibo(n-1) + recur_fibo(n-2))
-                                        
-                    nterms = 10
-                                        
-                    # check if the number of terms is valid
-                    if nterms <= 0:
-                       print("Plese enter a positive integer")
-                    else:
-                       print("Fibonacci sequence:")
-                       for i in range(nterms):
-                           print(recur_fibo(i))
-                            
-                    # Símbolo desconocido
-                    ? = 5
-                    # Saltos de línea
-                    print("\\nFin del programa")
-                    # Error de cadena sin cerrar
-                    cadena = '¡Esta cadena no se cierra correctamente
-
-                                                                """;
+            # Python program to display the Fibonacci sequence
+                                
+            def recur_fibonacci(n):
+               if n <= 1:
+                   return n
+               else:
+                   return(recur_fibonacci(n-1) + recur_fibonacci(n-2))
+            """;
 }

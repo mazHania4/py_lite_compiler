@@ -13,6 +13,9 @@ public class Production  implements Stackable {
     private String name;
     private int startLine;
     private int endLine;
+    private int referencesCounter;
+    private int index;
+    private String identifier;
 
 
     @Override

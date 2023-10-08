@@ -315,13 +315,18 @@ public enum ProdFCTY{
     ))),
 
     primary( bProd(List.of(
-                bOption(List.of( "atom", "_primary" ))
+                bOption(List.of( "def_reference" )),
+                bOption(List.of( "atom", "def_or_attribute_reference" ))
     ))),
 
-    _primary( bProd(List.of(
-                bOption(List.of( "DEL_DOT", "IDENTIFIER", "_primary" )),
-                bOption(List.of( "DEL_OPEN_PARENTHESIS", "opt_arguments", "DEL_CLOSE_PARENTHESIS", "_primary" )),
+    def_or_attribute_reference( bProd(List.of(
+                bOption(List.of( "DEL_DOT", "def_reference" )),
+                bOption(List.of( "DEL_DOT", "IDENTIFIER", "def_or_attribute_reference" )),
                 bOption(List.of( "s_epsilon" ))
+    ))),
+
+    def_reference( bProd(List.of(
+            bOption(List.of( "IDENTIFIER", "DEL_OPEN_PARENTHESIS", "opt_arguments", "DEL_CLOSE_PARENTHESIS", "def_or_attribute_reference" ))
     ))),
 
     atom( bProd(List.of(
@@ -453,14 +458,19 @@ public enum ProdFCTY{
         ))),
 
     t_primary( bProd(List.of(
-                bOption(List.of( "atom", "_t_primary", "s_next_is_t_lookahead" ) )
+                bOption(List.of( "t_def_reference" )),
+                bOption(List.of( "atom", "t_def_or_attribute_reference", "s_next_is_t_lookahead" ))
         ))),
 
-    _t_primary( bProd(List.of(
-                bOption(List.of( "DEL_DOT", "IDENTIFIER", "_t_primary", "s_next_is_t_lookahead" )),
-                bOption(List.of( "DEL_OPEN_PARENTHESIS", "opt_arguments", "DEL_CLOSE_PARENTHESIS", "_t_primary", "s_next_is_t_lookahead" )),
+    t_def_or_attribute_reference( bProd(List.of(
+                bOption(List.of( "DEL_DOT", "t_def_reference" )),
+                bOption(List.of( "DEL_DOT", "IDENTIFIER", "t_def_or_attribute_reference", "s_next_is_t_lookahead" )),
                 bOption(List.of( "s_epsilon" ))
         ))),
+
+    t_def_reference( bProd(List.of(
+            bOption(List.of( "IDENTIFIER", "DEL_OPEN_PARENTHESIS", "opt_arguments", "DEL_CLOSE_PARENTHESIS", "t_def_or_attribute_reference", "s_next_is_t_lookahead"  ))
+    ))),
 
     opt_semicolon( bProd(List.of(
             bOption(List.of( "DEL_SEMICOLON" ) ),

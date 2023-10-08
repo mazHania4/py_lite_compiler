@@ -15,70 +15,126 @@
 <?import org.fxmisc.richtext.CodeArea?>
 
 
-<VBox spacing="25" xmlns:fx="http://javafx.com/fxml"
+<VBox spacing="20" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.lfp.py_lite_compiler.MainWindowController" styleClass="main_container">
     <padding>
         <Insets top="15" right="15" bottom="15" left="15"/>
     </padding>
 
-            <BorderPane styleClass="banner" prefHeight="70">
-                <center>
-                    <Label styleClass="h2" text="P A R S E R - P Y"/>
-                </center>
-                <bottom>
-                    <Button BorderPane.alignment="TOP_RIGHT" styleClass="btn, btn-xs, btn-info" text="Ayuda"
-                            onAction="#onHelpButtonClick"/>
-                </bottom>
-            </BorderPane>
+    <BorderPane styleClass="banner" prefHeight="60">
+        <center>
+            <Label styleClass="h2" text="P A R S E R - P Y"/>
+        </center>
+        <bottom>
+            <Button BorderPane.alignment="TOP_RIGHT" styleClass="btn, btn-xs, btn-info" text="Ayuda"
+                    onAction="#onHelpButtonClick"/>
+        </bottom>
+    </BorderPane>
 
-    <GridPane>
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES"/>
-            <RowConstraints maxHeight="Infinity" minHeight="10.0" prefHeight="275" vgrow="ALWAYS"/>
-        </rowConstraints>
-        <Label text="Codigo fuente:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <HBox alignment="CENTER_RIGHT" layoutY="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
-            <Button styleClass="btn, btn-success" text=">>" onAction="#onRunButtonClick"/>
-            <Button styleClass="btn, btn-warning" text="Archivo" onAction="#onFileButtonClick"/>
-        </HBox>
-        <CodeArea wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="1" id="srcCode" fx:id="codeArea"
-                  styleClass="code_area"/>
-    </GridPane>
-    <HBox spacing="20">
-        <VBox spacing="5" alignment="CENTER_LEFT" prefHeight="225" prefWidth="620">
-            <GridPane >
-                <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
-                </columnConstraints>
-                <rowConstraints>
-                    <RowConstraints maxHeight="30.0" minHeight="20.0" prefHeight="25" vgrow="SOMETIMES"/>
-                    <RowConstraints maxHeight="Infinity" minHeight="10.0" prefHeight="200" vgrow="ALWAYS"/>
-                </rowConstraints>
-                <Label text="Reporte de Tokens:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                <HBox alignment="CENTER_RIGHT" layoutY="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                    <Button styleClass="btn, btn-primary" text="Grafico" onAction="#onGraphButtonClick"/>
-                </HBox>
-                <TableView fx:id="tokenTable" id="tokenTable" GridPane.columnSpan="2" GridPane.rowIndex="1">
-                    <columns>
-                        <TableColumn fx:id="indexColumn" text="#" prefWidth="30"/>
-                        <TableColumn fx:id="nameColumn" text="Token name" prefWidth="185"/>
-                        <TableColumn fx:id="patternColumn" text="Pattern" prefWidth="150"/>
-                        <TableColumn fx:id="lexemeColumn" text="Lexeme" prefWidth="170"/>
-                        <TableColumn fx:id="lineColumn" text="Line" prefWidth="50"/>
-                        <TableColumn fx:id="colColumn" text="Col" prefWidth="50"/>
-                    </columns>
-                </TableView>
-            </GridPane>
+    <HBox spacing="20" prefWidth="1460">
+
+        <GridPane prefWidth="700">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="30.0" minHeight="10.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="Infinity" minHeight="10.0" prefHeight="700" vgrow="ALWAYS"/>
+            </rowConstraints>
+            <Label text="Codigo fuente:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <HBox alignment="CENTER_RIGHT" layoutY="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <Button styleClass="btn, btn-success" text=">>" onAction="#onRunButtonClick"/>
+                <Button styleClass="btn, btn-warning" text="Archivo" onAction="#onFileButtonClick"/>
+            </HBox>
+            <CodeArea wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="1" id="srcCode" fx:id="codeArea"
+                      styleClass="code_area"/>
+        </GridPane>
+
+        <VBox spacing="15">
+            <VBox spacing="5" alignment="CENTER_LEFT" prefHeight="240" prefWidth="750">
+                <GridPane >
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="30.0" minHeight="20.0" prefHeight="25" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="Infinity" minHeight="10.0" prefHeight="240" vgrow="ALWAYS"/>
+                    </rowConstraints>
+                    <Label text="Tabla de Tokens:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <HBox alignment="CENTER_RIGHT" layoutY="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Button styleClass="btn, btn-primary" text="Grafico" onAction="#onGraphButtonClick"/>
+                    </HBox>
+                    <TableView fx:id="tokenTable" id="tokenTable" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                        <columns>
+                            <TableColumn fx:id="indexColumn" text="#" prefWidth="40"/>
+                            <TableColumn fx:id="nameColumn" text="Token name" prefWidth="200"/>
+                            <TableColumn fx:id="patternColumn" text="Pattern" prefWidth="150"/>
+                            <TableColumn fx:id="lexemeColumn" text="Lexeme" prefWidth="240"/>
+                            <TableColumn fx:id="lineColumn" text="Line" prefWidth="50"/>
+                            <TableColumn fx:id="colColumn" text="Col" prefWidth="50"/>
+                        </columns>
+                    </TableView>
+                </GridPane>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" prefHeight="200" prefWidth="320">
+                <Label text="Output:"/>
+                <TextArea wrapText="true" styleClass="text-area" editable="false" id="output" fx:id="output"/>
+            </VBox>
+            <HBox spacing="20">
+                <VBox spacing="5" alignment="CENTER_LEFT" prefHeight="255" prefWidth="300">
+                    <GridPane >
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints maxHeight="30.0" minHeight="20.0" prefHeight="25" vgrow="SOMETIMES"/>
+                            <RowConstraints maxHeight="Infinity" minHeight="10.0" prefHeight="255" vgrow="ALWAYS"/>
+                        </rowConstraints>
+                        <Label text="Bloques:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <HBox alignment="CENTER_RIGHT" layoutY="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Button styleClass="btn, btn-primary" text="Symbol table" onAction="#onSymbolTableButtonClick"/>
+                            <Button styleClass="btn, btn-primary" text="Statements" onAction="#onStatementsButtonClick"/>
+                        </HBox>
+                        <TableView fx:id="blockTable" id="blockTable" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                            <columns>
+                                <TableColumn fx:id="blockIndex" text="#" prefWidth="50"/>
+                                <TableColumn fx:id="blockStartLine" text="Start line" prefWidth="115"/>
+                                <TableColumn fx:id="blockEndLine" text="End line"  prefWidth="115"/>
+                            </columns>
+                        </TableView>
+                    </GridPane>
+                </VBox>
+                <VBox spacing="5" alignment="CENTER_LEFT" prefHeight="255" prefWidth="425">
+                    <GridPane >
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints maxHeight="30.0" minHeight="20.0" prefHeight="25" vgrow="SOMETIMES"/>
+                            <RowConstraints maxHeight="Infinity" minHeight="10.0" prefHeight="255" vgrow="ALWAYS"/>
+                        </rowConstraints>
+                        <Label text="Funciones:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <HBox alignment="CENTER_RIGHT" layoutY="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Button styleClass="btn, btn-primary" text="Show params" onAction="#onParamsButtonClick"/>
+                        </HBox>
+                        <TableView fx:id="functionTable" id="functionTable" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                            <columns>
+                                <TableColumn fx:id="defIndex" text="#" prefWidth="30"/>
+                                <TableColumn fx:id="defIdentifier" text="Identifier" prefWidth="170"/>
+                                <TableColumn fx:id="defStartLine" text="Start line" prefWidth="75"/>
+                                <TableColumn fx:id="defEndLine" text="End line" prefWidth="75"/>
+                                <TableColumn fx:id="defReferences" text="calls" prefWidth="55"/>
+                            </columns>
+                        </TableView>
+                    </GridPane>
+                </VBox>
+            </HBox>
         </VBox>
-        <VBox alignment="CENTER_LEFT" prefHeight="200" prefWidth="320">
-            <Label text="Errores:"/>
-            <TextArea wrapText="true" style="-fx-text-fill: red" editable="false" id="errorOutput" fx:id="output"/>
-        </VBox>
+
     </HBox>
 </VBox>
 
