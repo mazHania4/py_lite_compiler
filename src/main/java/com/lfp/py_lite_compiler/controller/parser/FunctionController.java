@@ -4,6 +4,8 @@ import com.lfp.py_lite_compiler.model.productions.Production;
 import com.lfp.py_lite_compiler.model.tokens.Token;
 import lombok.Builder;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 @Builder
@@ -21,6 +23,7 @@ public class FunctionController {
             function.setIdentifier( identifier );
             function.setReferencesCounter( countCalls(identifier) );
         }
+        addNotDefinedButCalledFunctions();
         return functions;
     }
 
@@ -37,5 +40,29 @@ public class FunctionController {
             }
         }
         return counter;
+    }
+
+    private void addNotDefinedButCalledFunctions(){
+        HashSet<String> definedFunctionsNames = new HashSet<>();
+        HashMap<String, Production> calledFunctions = new HashMap<>();
+        for (Production function : functions) {
+            var IdentifierToken = (Token) function.getMatchedOption().getFoundElements().get(1);
+            definedFunctionsNames.add(IdentifierToken.getLexeme());
+        }
+        for (Production calledFunction : functionCalls) {
+            var IdentifierToken = (Token) calledFunction.getMatchedOption().getFoundElements().get(0);
+            calledFunctions.put(IdentifierToken.getLexeme(), calledFunction);
+        }
+        for (String calledFunctionName: calledFunctions.keySet()) {
+            if (  !definedFunctionsNames.contains( calledFunctionName )  ) {
+                var functionCall = calledFunctions.get(calledFunctionName);
+                functionCall.setIndex(functions.size());
+                functionCall.setIdentifier( calledFunctionName );
+                functionCall.setReferencesCounter( countCalls(calledFunctionName) );
+                functionCall.setStartLine(0);
+                functionCall.setEndLine(0);
+                functions.add(functionCall);
+            }
+        }
     }
 }
