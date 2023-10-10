@@ -13,12 +13,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
@@ -135,7 +139,39 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void onParamsButtonClick() {
-        System.out.println("Show params");
+        Stage popupStage = new Stage();
+        popupStage.setTitle("Function parameters");
+        popupStage.setWidth(300);
+        popupStage.setHeight(400);
+        Scene popupScene = new Scene(new Group());
+        Label label = new Label("La función seleccionada \nno está definida \nen el archivo");
+        VBox vbox = new VBox();
+        vbox.setSpacing(5);
+        vbox.setPadding(new Insets(10, 10, 10, 10));
+        vbox.getChildren().add(label);
+        label.setFont(new Font("monospace", 16));
+        if (selectedFunction.getStartLine() != 0) {
+            List<Production> parameters = functionCtrl.getParams(selectedFunction);
+            if (parameters == null) {
+                label.setText("La función seleccionada \nno tiene parametros");
+            } else {
+                label.setText("Parametros de \n     '" + functionCtrl.getFunctionIdentifier(selectedFunction) + "' :");
+                TableView<Production> paramsTable = new TableView<>();
+                TableColumn<Production, String> index = new TableColumn<>("#");
+                TableColumn<Production, String> paramName = new TableColumn<>("Nombre");
+                paramsTable.setItems(FXCollections.observableList(parameters));
+                index.setCellValueFactory(new PropertyValueFactory<>("index"));
+                index.setPrefWidth(50);
+                paramName.setCellValueFactory(new PropertyValueFactory<>("identifier"));
+                paramName.setPrefWidth(230);
+                paramsTable.getColumns().addAll(index, paramName);
+                paramsTable.setPrefHeight(300);
+                vbox.getChildren().add(paramsTable);
+            }
+        }
+        ((Group) popupScene.getRoot()).getChildren().addAll(vbox);
+        popupStage.setScene(popupScene);
+        popupStage.show();
     }
 
     @FXML
