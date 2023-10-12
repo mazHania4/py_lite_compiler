@@ -49,7 +49,6 @@ public class FunctionController {
     private void param(Production paramNoDefault, List<Production> parameterList){
         var param = (Production) paramNoDefault.getMatchedOption().getFoundElements().get(0);
         String paramName = ((Token) param.getMatchedOption().getFoundElements().get(0)).getLexeme();
-        System.out.println("****añadio: " + paramName);
         parameterList.add(Production.builder()
                 .index(parameterList.size())
                 .identifier(paramName)
@@ -78,7 +77,6 @@ public class FunctionController {
             String calledIdentifier = token.getLexeme();
             if (calledIdentifier.equals(identifier)) {
                 counter++;
-                System.out.println(functionCall.getName());
             }
         }
         return counter;

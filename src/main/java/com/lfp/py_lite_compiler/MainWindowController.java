@@ -1,8 +1,11 @@
 package com.lfp.py_lite_compiler;
 
+import com.lfp.py_lite_compiler.controller.parser.BlockController;
 import com.lfp.py_lite_compiler.controller.parser.FunctionController;
 import com.lfp.py_lite_compiler.controller.parser.Parser;
 import com.lfp.py_lite_compiler.controller.scanner.Scanner;
+import com.lfp.py_lite_compiler.model.Statement;
+import com.lfp.py_lite_compiler.model.Symbol;
 import com.lfp.py_lite_compiler.model.errors.Error;
 import com.lfp.py_lite_compiler.model.productions.Production;
 import com.lfp.py_lite_compiler.model.tokens.Token;
@@ -40,6 +43,7 @@ public class MainWindowController implements Initializable {
     private TextArea output;
     private ColoringController colorCtrl;
     private FunctionController functionCtrl;
+    private BlockController blockCtrl;
 
     // Token table elements:
     private ObservableList<Token> tokenList = FXCollections.observableArrayList();
@@ -88,14 +92,22 @@ public class MainWindowController implements Initializable {
         var parser = new Parser(tokens);
         String syntaxError = "";
         if (parser.analyze()){
-            showFunctionTable(parser, tokens);
+            showFunctionsTable(parser, tokens);
+            showBlocksTable(parser, tokens);
         } else {
             syntaxError = parser.getError().getMessage();
         }
         printOutput(lexicalErrors, syntaxError);
     }
 
-    private void showFunctionTable(Parser parser, List<Token> tokens){
+    private void showBlocksTable(Parser parser, List<Token> tokens){
+        var blocks = parser.getBlocks();
+        blockCtrl = BlockController.builder().blocks(blocks).tokens(tokens).build();
+        blockList = FXCollections.observableArrayList( blockCtrl.getBlocks() );
+        blockTable.setItems(blockList);
+    }
+
+    private void showFunctionsTable(Parser parser, List<Token> tokens){
         var functions = parser.getFunctions();
         var functionCalls = parser.getFunctionCalls();
         functionCtrl = FunctionController.builder().functions(functions).functionCalls(functionCalls).tokens(tokens).build();
@@ -176,12 +188,71 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void onSymbolTableButtonClick() {
-        System.out.println("Show symbol table");
+        Stage popupStage = new Stage();
+        popupStage.setTitle("Symbol table");
+        popupStage.setWidth(400);
+        popupStage.setHeight(400);
+        Scene popupScene = new Scene(new Group());
+        Label label = new Label("Tabla de simbolos");
+        VBox vbox = new VBox();
+        vbox.setSpacing(5);
+        vbox.setPadding(new Insets(10, 10, 10, 10));
+        vbox.getChildren().add(label);
+        label.setFont(new Font("monospace", 16));
+        List<Symbol> symbols = blockCtrl.getSymbols(selectedBlock);
+        TableView<Symbol> symbolTable = new TableView<>();
+        TableColumn<Symbol, String> index = new TableColumn<>("#");
+        TableColumn<Symbol, String> identifier = new TableColumn<>("Simbolo");
+        TableColumn<Symbol, String> type = new TableColumn<>("Tipo");
+        TableColumn<Symbol, String> line = new TableColumn<>("Linea");
+        TableColumn<Symbol, String> col = new TableColumn<>("Columna");
+        symbolTable.setItems(FXCollections.observableList(symbols));
+        index.setCellValueFactory(new PropertyValueFactory<>("index"));
+        index.setPrefWidth(50);
+        identifier.setCellValueFactory(new PropertyValueFactory<>("identifier"));
+        identifier.setPrefWidth(120);
+        type.setCellValueFactory(new PropertyValueFactory<>("type"));
+        type.setPrefWidth(100);
+        line.setCellValueFactory(new PropertyValueFactory<>("line"));
+        line.setPrefWidth(50);
+        col.setCellValueFactory(new PropertyValueFactory<>("column"));
+        col.setPrefWidth(50);
+        symbolTable.getColumns().addAll(index, identifier, type, line, col);
+        symbolTable.setPrefHeight(300);
+        vbox.getChildren().add(symbolTable);
+        ((Group) popupScene.getRoot()).getChildren().addAll(vbox);
+        popupStage.setScene(popupScene);
+        popupStage.show();
     }
 
     @FXML
     public void onStatementsButtonClick() {
-        System.out.println("Show Instructions");
+        Stage popupStage = new Stage();
+        popupStage.setTitle("Statement table");
+        popupStage.setWidth(500);
+        popupStage.setHeight(400);
+        Scene popupScene = new Scene(new Group());
+        Label label = new Label("Instrucciones del bloque de codigo");
+        VBox vbox = new VBox();
+        vbox.setSpacing(5);
+        vbox.setPadding(new Insets(10, 10, 10, 10));
+        vbox.getChildren().add(label);
+        label.setFont(new Font("monospace", 16));
+        List<Statement> statements = blockCtrl.getStatements(selectedBlock);
+        TableView<Statement> statementsTable = new TableView<>();
+        TableColumn<Statement, String> index = new TableColumn<>("#");
+        TableColumn<Statement, String> statement = new TableColumn<>("Instrucción");
+        statementsTable.setItems(FXCollections.observableList(statements));
+        index.setCellValueFactory(new PropertyValueFactory<>("index"));
+        index.setPrefWidth(50);
+        statement.setCellValueFactory(new PropertyValueFactory<>("statement"));
+        statement.setPrefWidth(400);
+        statementsTable.getColumns().addAll(index, statement);
+        statementsTable.setPrefHeight(300);
+        vbox.getChildren().add(statementsTable);
+        ((Group) popupScene.getRoot()).getChildren().addAll(vbox);
+        popupStage.setScene(popupScene);
+        popupStage.show();
     }
 
     private String getErrorMessages(List<Error> errors) {

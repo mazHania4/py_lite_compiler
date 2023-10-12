@@ -55,7 +55,6 @@ public class Parser {
             var stack = initializeStack(option);
             do{
                 elementWasMatched = false;
-                System.out.print("\n---element evaluated:" + stack.peek() + " current position: " + currentPosition );
                 switch ((getType(stack.peek()))){
                     case TOKEN -> {
                         var tokenType = getToken(stack.peek());
@@ -85,9 +84,7 @@ public class Parser {
                         }
                     }
                 }
-                System.out.print(" | succeeded? " + elementWasMatched);
             } while (!stack.isEmpty() && elementWasMatched);
-            System.out.println(" | Out of WHILE: "+ elementWasMatched + " option: " + option);
             if(elementWasMatched) { //the option was completely matched so the production succeeded
                 optionSucceeded = true;
                 break;
