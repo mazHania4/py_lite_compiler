@@ -27,7 +27,7 @@ compound_stmt:
     | while_stmt
 
 assignment:
-    | NAME ':' expression opt_assign_expressions
+    | NAME ':' expression opt_assign_xepressions
     | '(' single_target ')' ':' expression opt_assign_expressions
     | single_subscript_attribute_target ':' expression opt_assign_expressions
     | targets '=' _assignment expressions
